@@ -1,0 +1,86 @@
+﻿@*@model IEnumerable<CNWeb.Models.OrderProductModel>*@
+@model IEnumerable<Models.EF.ORDERDETAIL>
+
+<table class="table" style="margin-bottom: 0;">
+    <tr>
+        <th class="text-center">
+            @*@Html.DisplayNameFor(Model => Model.ProductID)*@
+            ID Đơn hàng
+        </th>
+        <th class="text-center">
+            @*@Html.DisplayNameFor(Model => Model.PRODUCT.ProductName)*@
+            Tên Sản Phẩm
+        </th>
+        <th class="text-center">
+            @*@Html.DisplayNameFor(Model => Model.PRODUCT.ProductName)*@
+            Đơn giá
+        </th>
+        <th class="text-center">
+            @*@Html.DisplayNameFor(Model => Model.Quantity)*@
+            Số lượng
+        </th>
+        <th class="text-center">
+            @*@Html.DisplayNameFor(Model => Model.PRODUCT.ProductName)*@
+            Thành tiền
+        </th>
+    </tr>
+    
+    @foreach (var item in Model)
+    {
+    <tr>
+
+        <td class="text-center">
+            @*@Html.DisplayFor(modelItem => item.ProductID)*@
+        </td>
+
+        <td class="text-center">
+            <a href="@Url.Action("Detail", "Shop", new { id = item.ProductID, url = item.PRODUCT.ProductURL })">
+                @Html.DisplayFor(modelItem => item.PRODUCT.ProductName)
+            </a>
+        </td>
+
+
+
+
+        @if (item.PRODUCT.PromotionPrice.HasValue)
+        {
+            
+            <td class="text-center">
+                
+                @item.PRODUCT.PromotionPrice.Value.ToString("#,##0")
+            </td>
+        }
+        else
+        {
+            <td class="text-center">
+                @item.PRODUCT.ProductPrice.ToString("#,##0")
+            </td>
+        }
+
+        <td class="text-center">
+            @Html.DisplayFor(modelItem => item.Quantity)
+        </td>
+
+        @if (item.PRODUCT.PromotionPrice.HasValue)
+        {
+            var tong1 = item.PRODUCT.PromotionPrice.Value * item.Quantity;
+            <td class="text-center">
+                @tong1.Value.ToString("#,##0")
+            </td>
+        }
+        else
+        {
+            var tong2 = item.PRODUCT.ProductPrice * item.Quantity;
+
+            <td class="text-center">
+                @tong2.Value.ToString("#,##0")
+            </td>
+        }
+
+
+
+
+
+    </tr>
+    }
+</table>

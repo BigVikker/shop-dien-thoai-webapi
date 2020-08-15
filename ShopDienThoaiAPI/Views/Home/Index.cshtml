@@ -1,0 +1,199 @@
+﻿@{
+    ViewBag.Title = "Trang chủ";
+}
+
+<link href="~/Areas/Admin/assets/plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/Areas/Admin/assets/plugins/datatables/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/Areas/Admin/assets/plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+<div class="slider-area">
+    <div class="slider-active owl-carousel">
+        <div class="single-slider slider-1" style="background-image: url(/Assets/img/slider/bg1.jpg)">
+            <div class="container">
+                <div class="slider-content slider-animated-1">
+                    <div class="slider-img text-center">
+                        <img class="animated" src="~/Assets/img/slider/iphone.jpg" alt="slider images">
+                    </div>
+                    <div class="slider-text-img">
+                        <h6 class="animated">Iphone 11 Pro Max 64GB - Cải tiến cụm camera mạnh mẽ</h6>
+                        <img class="animated" src="~/Assets/img/icon-img/bike.png" alt="slider images">
+                    </div><br />
+                    <h3 class="animated">IPHONES</h3>
+                </div>
+            </div>
+        </div>
+        <div class="single-slider slider-1" style="background-image: url(/Assets/img/slider/bg1.jpg)">
+            <div class="container">
+                <div class="slider-content slider-animated-1">
+                    <div class="slider-img text-center">
+                        <img class="animated" src="~/Assets/img/slider/samsung.jpg" alt="slider images">
+                    </div>
+                    <div class="slider-text-img">
+                        <h6 class="animated">SamSung Galaxy A71 - Công nghệ chụp cận cảnh</h6>
+                        <img class="animated" src="~/Assets/img/icon-img/bike.png" alt="slider images">
+                    </div><br />
+                    <h3 class="animated">SAMSUNG</h3>
+                </div>
+            </div>
+        </div>
+        <div class="single-slider slider-1" style="background-image: url(/Assets/img/slider/bg1.jpg)">
+            <div class="container">
+                <div class="slider-content slider-animated-1">
+                    <div class="slider-img text-center">
+                        <img class="animated" src="~/Assets/img/slider/huawei.jpg" alt="slider images">
+                    </div>
+                    <div class="slider-text-img">
+                        <h6 class="animated">Điện thoại Huawei P30 Pro - Camera zoom đến 50x</h6>
+                        <img class="animated" src="~/Assets/img/icon-img/bike.png" alt="slider images">
+                    </div><br />
+                    <h3 class="animated">HUAWEI</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slider-social">
+        <ul>
+            <li class="facebook"><a href="https://www.facebook.com/hhqvietnam/"><i class="icofont icofont-social-facebook"></i></a></li>
+            <li class="twitter"><a href="#"><i class="icofont icofont-social-twitter"></i></a></li>
+            <li class="pinterest"><a href="#"><i class="icofont icofont-social-pinterest"></i></a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="blog-area pt-150 pb-110">
+    <div class="container">
+        <div class="section-title text-center mb-60">
+            <h2 style="font-size:70px;">Được Xem Nhiều</h2>
+        </div>
+        <div class="row" id="top-view-product">
+        </div>
+    </div>
+</div>
+
+<div class="blog-area pt-150 pb-110">
+    <div class="container">
+        <div class="section-title text-center mb-60">
+            <h2 style="font-size:70px;">Sản phẩm mới nhất</h2style="font-size:70px;">
+        </div>
+        <div class="row" id="newest-product">
+        </div>
+    </div>
+</div>
+
+<div class="overview-area pt-135">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <div class="overview-content">
+                    <h1>Corona Update</h1>
+                    <br />
+                    <table class="table table-bordered" id="covid-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Xếp hạng</th>
+                                <th scope="col">Quốc gia</th>
+                                <th scope="col">Số ca nhiễm</th>
+                                <th scope="col">Tử vong</th>
+                                <th scope="col">Hồi phục</th>
+                            </tr>
+                        </thead>
+                        <tbody id="covid-data">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <div class="overview-img">
+                    <img class="tilter" src="~/Assets/img/banner/banner.jpg" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div class="testimonial-area" style="margin-bottom: 100px;">
+    <div class="container">
+        <div class="section-title-2 section-title-position">
+            <h2>PHẢN HỒI TỪ KHÁCH HÀNG</h2>
+        </div>
+        <div class="testimonial-active owl-carousel">
+            <div class="single-testimonial">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="testimonial-img pl-75">
+                            <img alt="image" src="~/Assets/img/team/steve_jobs.jpg">
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="testimonial-content">
+                            <div class="testimonial-dec">
+                                <p><span>HHQ</span> rất uy tín</p>
+                            </div>
+                            <div class="name-designation">
+                                <h4>Steve Jobs</h4>
+                                <span>CEO , Apple</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="single-testimonial">
+                <div class="row">
+                    <div class="col-lg-5 col-md-12 col-12">
+                        <div class="testimonial-img pl-75">
+                            <img alt="image" src="~/Assets/img/team/billgate.jpg">
+                        </div>
+                    </div>
+                    <div class="col-lg-7 col-md-12 col-12">
+                        <div class="testimonial-content">
+                            <div class="testimonial-dec">
+                                <p><span>HHQ</span> xứng đáng cửa hàng uy tín số 1 Việt Nam</p>
+                            </div>
+                            <div class="name-designation">
+                                <h4>Bill Gates</h4>
+                                <span>CEO , Microsoft Corp.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+@section scripts{
+    <script src="~/Areas/Admin/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Areas/Admin/assets/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Areas/Admin/assets/plugins/datatables/dataTables.responsive.min.js"></script>
+    <script src="~/Areas/Admin/assets/plugins/datatables/responsive.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.post("@Url.Action("SelectTop", "Shop")", {
+                "cond": "top"
+            }, function (data) {
+                $("#top-view-product").append(data);
+            });
+
+            $.post("@Url.Action("SelectTop", "Shop")", {
+                "cond": "newest"
+            }, function (data) {
+                $("#newest-product").append(data);
+            });
+
+            $.get("https://api.apify.com/v2/key-value-stores/tVaYRsPHLjNdNBu7S/records/LATEST?disableRedirect=true", function (data) {
+                var html = $("#covid-data");
+                for (i = 0; i < data.length; i++) {
+                    html.append(`<tr>
+                                    <th scope="row">${i + 1}</th>
+                                    <td>${data[i].country}</td>
+                                    <td>${data[i].infected}</td>
+                                    <td>${data[i].deceased}</td>
+                                    <td>${data[i].recovered}</td>
+                                </tr>`);
+                }
+
+                $('#covid-table').DataTable()
+            });
+        });
+    </script>
+}

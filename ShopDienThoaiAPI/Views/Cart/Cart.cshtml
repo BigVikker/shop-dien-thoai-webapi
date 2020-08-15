@@ -1,0 +1,180 @@
+﻿@model IEnumerable<cong_nghe_web.Models.CartItemModel>
+@{
+    ViewBag.Title = "Cart";
+}
+
+
+
+<div class="breadcrumb-area pt-255 pb-170" style="background-image: url(/Assets/img/slider/bg1.jpg)">
+    <div class="container-fluid">
+        <div class="breadcrumb-content text-center">
+            <h2>giỏ hàng</h2>
+            <ul>
+                <li>
+                    <a href="@Url.Action("Index", "Home")">home</a>
+                </li>
+                <li>giỏ hàng</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="product-cart-area pt-120 pb-130">
+    <div class="container">
+        @if (Model.Count() != 0)
+        {
+            int tongsl = 0;
+            decimal total = 0, subtotal = 0;
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="table-content table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="product-name text-center">#</th>
+                                    <th class="product-price text-center">Tên</th>
+                                    <th class="product-name text-center">Đơn giá</th>
+                                    <th class="product-price text-center">Số lượng</th>
+                                    <th class="product-quantity text-center">Tổng</th>
+                                    <th class="product-subtotal text-center">Tùy chọn</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    subtotal = 0;
+                                    <tr>
+                                        <td class="product-thumbnail text-center">
+                                            <a href="@Url.Action("Detail", "Shop", new { id = item.product.ProductID, url = item.product.ProductURL })">
+                                                <img src="@item.product.ProductImage" alt="" style="width: 120px;
+">
+                                            </a>
+                                        </td>
+                                        <td class="product-name text-center">
+                                            <a href="@Url.Action("Detail", "Shop", new { id = item.product.ProductID, url = item.product.ProductURL })">
+                                                @item.product.ProductName
+                                            </a>
+                                        </td>
+                                        <td class="product-price text-center">
+                                            @if (item.product.PromotionPrice.HasValue)
+                                            {
+                                                <span class="amount">
+                                                    @item.product.PromotionPrice.Value.ToString("#,##0")₫
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="amount">
+                                                    @item.product.ProductPrice.ToString("#,##0")₫
+                                                </span>
+                                            }
+                                        </td>
+                                        <td class="product-quantity text-center">
+                                            <span class="amount">
+                                                @*@item.quantity*@
+
+                                                <input type="number" value="@item.quantity" >
+                                            
+                                            </span>
+                                        </td>
+                                        @if (item.product.PromotionPrice.HasValue)
+                                        {
+                                            subtotal = item.product.PromotionPrice.Value * item.quantity;
+                                            total += subtotal;
+                                            tongsl = tongsl + item.quantity;
+                                            <td class="product-subtotal text-center">
+                                                @subtotal.ToString("#,##0")₫
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            subtotal = item.product.ProductPrice * item.quantity;
+                                            total += subtotal;
+                                            tongsl = tongsl + item.quantity;
+                                            <td class="product-subtotal text-center">
+                                                @subtotal.ToString("#,##0")₫
+                                            </td>
+
+                                        }
+                                        <td class="product-cart-icon product-subtotal text-center">
+                                            <a href="@Url.Action("Delete", "Cart", new { id = item.product.ProductID })">
+                                                <i class="ti-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="cart-shiping-update">
+                        <div class="cart-shipping">
+                            <a class="btn-style cr-btn" href="@Url.Action("Shop", "Shop")">
+                                <span>tiếp tục mua hàng</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-7 col-sm-6">
+                </div>
+                <div class="col-md-5 col-sm-6">
+                    <div class="shop-total">
+                        <h3>chi tiết giỏ hàng</h3>
+                        <ul>
+                            <li>
+                                đơn giá
+                                <span>@total.ToString("#,##0")₫</span>
+                            </li>
+                            <li class="order-total">
+                                vận chuyển
+                                <span>0</span>
+                            </li>
+                            <li>
+                                tổng đơn hàng
+                                <span>@total.ToString("#,##0")₫</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="continue-shopping-btn text-center">
+                        <a href="@Url.Action("Shop", "Shop")">tiếp tục mua hàng</a>
+                    </div>
+                    <div class="cart-btn text-center mb-15">
+                        @if(tongsl > 100)
+                        {
+                        <a href="javascript:void(0)">Giỏ hàng tối đa 100 sản phẩm, vui lòng bỏ bớt</a>
+                        }
+                        else
+                        {
+                        <a href="@Url.Action("Checkout", "Cart")">thanh toán</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <h1 class="text-center">
+                Giỏ hàng trống
+                <img src="~/Assets/img/cart/empty-cart.png"/>
+            </h1>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="cart-shiping-update">
+                        <div class="cart-shipping">
+                            <a class="btn-style cr-btn" href="@Url.Action("Shop", "Shop")">
+                                <span>bắt đầu mua hàng...</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

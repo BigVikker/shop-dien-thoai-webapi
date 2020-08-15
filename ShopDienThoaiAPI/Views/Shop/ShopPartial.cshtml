@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Models.EF.PRODUCT>
+
+@foreach (var item in Model)
+{
+    <div class="product-width col-md-4 col-xl-3 col-lg-4">
+        <div class="product-wrapper mb-35">
+            <div class="product-img">
+                <a href="@Url.Action("Detail", "Shop", new { id = item.ProductID, url = item.ProductURL })">
+                    <img src="@item.ProductImage" alt="@item.ProductName">
+                </a>
+                <div class="product-action">
+                    <a class="action-plus-2 p-action-none" title="Thêm vào giỏ hàng"
+                       href="@Url.Action("Detail", "Shop", new { id = item.ProductID, url = item.ProductURL })">
+                        <i class="ti-shopping-cart"></i>
+                    </a>
+                </div>
+                <div class="product-content-wrapper">
+                    <div class="product-title-spreed">
+                        <h4>
+                            <a href="@Url.Action("Detail", "Shop", new { id = item.ProductID, url = item.ProductURL })">
+                                @item.ProductName
+                            </a>
+                        </h4>
+                    </div>
+                    <div class="product-price">
+                        @if (item.PromotionPrice.HasValue)
+                        {
+                            <span>@item.PromotionPrice.Value.ToString("#,##0")₫</span>
+                        }
+                        else
+                        {
+                            <span>@item.ProductPrice.ToString("#,##0")₫</span>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="product-list-details">
+                <h2>
+                    <a href="@Url.Action("Detail", "Shop", new { id = item.ProductID, url = item.ProductURL })">
+                        @item.ProductName
+                    </a>
+                </h2>
+                <div class="quick-view-rating">
+                    <i class="fa fa-star reting-color"></i>
+                    <i class="fa fa-star reting-color"></i>
+                    <i class="fa fa-star reting-color"></i>
+                    <i class="fa fa-star reting-color"></i>
+                    <i class="fa fa-star reting-color"></i>
+                </div>
+                <div class="product-price">
+                    @if (item.PromotionPrice.HasValue)
+                    {
+                        <span>@item.PromotionPrice.Value.ToString("#,##0")₫</span>
+                    }
+                    else
+                    {
+                        <span>@item.ProductPrice.ToString("#,##0")₫</span>
+                    }
+                </div>
+                <p>@item.ProductDescription</p>
+                <div class="shop-list-cart">
+                    <a href="@Url.Action("Detail", "Shop", new { id = item.ProductID, url = item.ProductURL })"><i class="ti-shopping-cart"></i> Add to cart</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

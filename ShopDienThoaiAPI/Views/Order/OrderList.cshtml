@@ -1,0 +1,94 @@
+﻿@*@model IEnumerable<CNWeb.Models.OrderModel>*@
+@model IEnumerable<Models.EF.ORDER>
+
+<link href="~/Assets/css/order-list.css" rel="stylesheet" />
+
+<div class="table-responsive table-bordered">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <th class="text-center">ID Đơn hàng</th>
+                <th class="text-center">Tổng tiền</th>
+                <th class="text-center">Ngày đặt hàng</th>
+                <th class="text-center">Tình Trạng</th>
+                <th class="text-center">Ghi chú</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="accordion-toggle collapsed alert" id="alert-@item.OrderID">
+                    <td class="expand-button" id="accordion-@item.OrderID" data-toggle="collapse" data-parent="#accordion-@item.OrderID" href="#collapse-@item.OrderID" style="cursor: pointer;"></td>
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.OrderID)
+                    </td>
+                    <td class="text-center">
+                        @item.Total.Value.ToString("#,##0")₫
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.OrderDate)
+                    </td>
+                    <th class="text-center" id="ordername-@item.OrderID">
+                        @*@Html.DisplayFor(modelItem => item.ORDERSTATU.StatusName)*@
+                    </th>
+                    <td class="text-center">
+                        @*@if (item.ORDERSTATU.StatusID.Equals(1))
+                        {
+                            <button class="btn btn-danger" id="@item.OrderID"
+                                    onclick="return CancelOrder('@item.OrderID')">
+                                Hủy đơn hàng
+                            </button>
+                        }*@
+                    </td>
+                </tr>
+                <tr class="hide-table-padding">
+                    <td colspan="7">
+                        <div id="collapse-@item.OrderID" class="collapse in p-3">
+                            <div class="card card-body" id="@item.OrderID-product-partial">
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@foreach (var item in Model)
+{
+<script>
+        $(document).ready(function () {
+            $.get(`https://localhost:44319/api/order/getordername`,
+                {
+                    "orderid": "@item.OrderID"
+                },
+                function (data) {
+                    $("#ordername-@item.OrderID").append(data.StatusName);
+                }
+            );
+
+
+            @*$.get("@Url.Action("OrderProductList", "Order")",
+                {
+                    "OrderID": "@item.OrderID"
+                },
+                function (data) {
+                    $("#@item.OrderID-product-partial").append(data);
+
+                    var alert = $("#alert-@item.OrderID");
+
+                    if (@item.OrderStatusID === 1) {
+                        alert.addClass('alert-secondary');
+                    } else if (@item.OrderStatusID === 2) {
+                        alert.addClass('alert-primary');
+                    } else if (@item.OrderStatusID === 3) {
+                        alert.addClass('alert-success');
+                    } else if (@item.OrderStatusID === 4 || @item.OrderStatusID === 5) {
+                        alert.addClass('alert-danger');
+                    };
+                }
+            );*@
+        });
+</script>
+}

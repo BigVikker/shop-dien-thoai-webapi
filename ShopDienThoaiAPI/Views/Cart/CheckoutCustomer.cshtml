@@ -1,0 +1,248 @@
+﻿@model IEnumerable<cong_nghe_web.Models.CartItemModel>
+@{
+    ViewBag.Title = "Checkout";
+    var customer = ViewData["Customer"] as Models.EF.CUSTOMER;
+}
+
+<div class="breadcrumb-area pt-255 pb-170" style="background-image: url(/Assets/img/slider/bg1.jpg)">
+    <div class="container-fluid">
+        <div class="breadcrumb-content text-center">
+            <h2>thanh toán</h2>
+            <ul>
+                <li>
+                    <a href="@Url.Action("Index", "Home")">home</a>
+                </li>
+                <li>thanh toán</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="checkout-area pt-130 pb-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="coupon-accordion">
+                    <h3>
+                        Thanh toán với tư cách @customer.CustomerName !!!
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <form action="#" id="checkout-form">
+            <div class="row">
+                <div class="col-lg-6 col-md-12 col-12">
+                    <div class="checkbox-form">
+                        <h3>Billing Details</h3>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="checkout-form-list">
+                                    <label>Họ tên<span class="required">*</span></label>
+                                    <input type="text" placeholder="Họ tên..." value="@customer.CustomerName" name="customer-fullname" id="customer-fullname" />
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="checkout-form-list">
+                                    <label>Địa chỉ <span class="required">*</span></label>
+                                    <input type="text" placeholder="Địa chỉ..." value="@customer.CustomerAddress" name="customer-address" id="customer-address" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="checkout-form-list">
+                                    <label>Điện thoại  <span class="required">*</span></label>
+                                    <input type="tel" placeholder="Điện thoại..." value="@customer.CustomerPhone" name="customer-phone" id="customer-phone" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="checkout-form-list">
+                                    <label>Email</label>
+                                    <input type="email" placeholder="Email..." value="@customer.CustomerEmail" name="customer-email" id="customer-email" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 col-12">
+                    <div class="your-order">
+                        <h3>Đơn hàng của bạn:</h3>
+                        <div class="your-order-table table-responsive">
+                            @{ int tongsp = 0; decimal total = 0, subtotal = 0; }
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th class="product-name">sản phẩm</th>
+                                        <th class="product-total">giá</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        subtotal = 0;
+                                        <tr class="cart_item">
+                                            <td class="product-name">
+                                                @item.product.ProductName
+                                                <strong class="product-quantity"> × @item.quantity</strong>
+                                            </td>
+                                            <td class="product-total">
+                                                @if (item.product.PromotionPrice.HasValue)
+                                                {
+                                                    tongsp = tongsp + item.quantity;
+                                                    subtotal = (item.product.PromotionPrice.Value * item.quantity);
+                                                    total += subtotal;
+                                                    <span class="amount">
+                                                        @subtotal.ToString("#,##0")₫
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    tongsp = tongsp + item.quantity;
+                                                    subtotal = (item.product.ProductPrice * item.quantity);
+                                                    total += subtotal;
+                                                    <span class="amount">
+                                                        @subtotal.ToString("#,##0")₫
+                                                    </span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr class="order-total">
+                                        <th>Tổng</th>
+                                        <td>
+                                            <strong><span class="amount">@total.ToString("#,##0")₫</span></strong>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div class="payment-method mt-40">
+                            <div class="payment-accordion">
+                                @*<div class="panel-group" id="faq">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h5 class="panel-title"><a data-toggle="collapse" aria-expanded="true" data-parent="#faq" href="#payment-1">Direct Bank Transfer.</a></h5>
+                </div>
+                <div id="payment-1" class="panel-collapse collapse show">
+                    <div class="panel-body">
+                        <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h5 class="panel-title"><a class="collapsed" data-toggle="collapse" aria-expanded="false" data-parent="#faq" href="#payment-2">Cheque Payment</a></h5>
+                </div>
+                <div id="payment-2" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h5 class="panel-title"><a class="collapsed" data-toggle="collapse" aria-expanded="false" data-parent="#faq" href="#payment-3">PayPal</a></h5>
+                </div>
+                <div id="payment-3" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+                                @if (tongsp > 100)
+                                {
+                                    <div >
+
+                                        <input border="" type="text" value="Giỏ hàng chứa tối đa 100 sản phẩm, không thể thanh toán" disabled/>
+
+                                    </div>
+                                }
+                                else
+                                {
+                                    <h5 class="text-center text-danger" id="checkout-info-text"></h5>
+                                    <div class="order-button-payment">
+
+                                        <input type="submit" value="Thanh toán" />
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-5">
+                                            <h5 id="timer-text"></h5>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <h5 id="timer"></h5>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#checkout-form").validate({
+                rules: {
+                    'customer-fullname': "required",
+                    'customer-address': "required",
+                    'customer-phone': "required",
+                    'customer-email': {
+                        email: true
+                    }
+                },
+                messages: {
+                    'customer-fullname': "Không thể trống",
+                    'customer-address': "Không thể trống",
+                    'customer-phone': "Không thể trống",
+                    'customer-email': {
+                        email: "Không đúng định dạng email"
+                    }
+                },
+                submitHandler: function () {
+                    var data = {
+                        "CustomerName": $("#customer-fullname").val(),
+                        "CustomerPhone": $("#customer-phone").val(),
+                        "CustomerAddress": $("#customer-address").val()
+                    };
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("SubmitCheckoutCustomer", "Cart")",
+                        data: JSON.stringify(data),
+                        dataType: "json",
+                        contentType: "application/json",
+                        success: function (response) {
+                            if (response.Success) {
+                                $('#checkout-btn').val("Đặt hàng thành công").css("background", "#00ff7f").css("color", "#000");
+
+                                $("#timer-text").text("Trở về trang cá nhân sau: ");
+                                $("#timer").text("5")
+                                window.setInterval(function () {
+                                    var timeLeft = $("#timer").html();
+                                    if (eval(timeLeft) == 0) {
+                                        location.href = "@Url.Action("CustomerProfile", "Customer", new { username = customer.CustomerUsername })";
+                                    } else {
+                                        $("#timer").html(eval(timeLeft) - eval(1));
+                                    }
+                                }, 1000);
+
+                            } else {
+                                $('#checkout-btn').val("Đặt hàng thất bại").css("background", "#f51d1a");
+                            }
+                        },
+                        error: function () {
+                            $('#checkout-btn').val("Đã có lỗi khi đặt hàng").css("background", "#f51d1a");
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}
+

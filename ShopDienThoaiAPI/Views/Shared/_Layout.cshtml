@@ -1,0 +1,67 @@
+﻿<!doctype html>
+<html class="no-js" lang="zxx">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>@ViewBag.Title</title>
+
+    <!-- all css here -->
+    <link rel="stylesheet" href="~/Assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Assets/css/animate.css">
+    <link rel="stylesheet" href="~/Assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/Assets/css/chosen.min.css">
+    <link rel="stylesheet" href="~/Assets/css/icofont.css">
+    <link rel="stylesheet" href="~/Assets/css/themify-icons.css">
+    <link rel="stylesheet" href="~/Assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/Assets/css/meanmenu.min.css">
+    <link rel="stylesheet" href="~/Assets/css/bundle.css">
+    <link rel="stylesheet" href="~/Assets/css/style.css">
+    <link rel="stylesheet" href="~/Assets/css/responsive.css">
+    <script src="~/Assets/js/vendor/modernizr-2.8.3.min.js"></script>
+    <script src="~/Assets/js/vendor/jquery-1.12.0.min.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+        @Html.Partial("_Navbar")
+
+        @RenderBody()
+
+        @Html.Partial("_Footer")
+    </div>
+
+    <!-- all js here -->
+    <script src="~/Assets/js/popper.js"></script>
+    <script src="~/Assets/js/bootstrap.min.js"></script>
+    <script src="~/Assets/js/isotope.pkgd.min.js"></script>
+    <script src="~/Assets/js/imagesloaded.pkgd.min.js"></script>
+    <script src="~/Assets/js/jquery.counterup.min.js"></script>
+    <script src="~/Assets/js/waypoints.min.js"></script>
+
+    <script src="~/Assets/js/owl.carousel.min.js"></script>
+    <script src="~/Assets/js/plugins.js"></script>
+    <script src="~/Assets/js/main.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $(".partial-content").each(function (index, item) {
+                var url = $(item).data("url");
+                if (url && url.length > 0) {
+                    $(item).load(url);
+                }
+            });
+        })
+    </script>
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/5e5926ab298c395d1cea4ed0/default';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+</body>
+</html>

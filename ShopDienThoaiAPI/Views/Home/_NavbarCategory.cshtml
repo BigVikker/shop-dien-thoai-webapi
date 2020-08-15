@@ -1,0 +1,13 @@
+﻿@model IEnumerable<Models.EF.BRAND>
+@{ Layout = null; }
+@if (Model != null)
+{
+    foreach (var item in Model) 
+    {
+        <li>
+            <a href="@Url.Action("ShopCategory", "Shop", new { id = item.BrandID, url = item.BrandURL })">
+                @item.BrandName
+            </a>
+        </li>
+    }
+}

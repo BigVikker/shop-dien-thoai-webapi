@@ -1,0 +1,24 @@
+﻿@model Models.EF.CONFIGURATION
+
+@if (Model != null)
+{
+    <ul class="list-group list-group-flush mb-4">
+        <li class="list-group-item pl-0 pr-0 pt-2 pb-2">
+            <b>Brand:</b>
+            <a href="@Url.Action("ShopCategory", "Shop", new { url = Model.PRODUCT.BRAND.BrandURL })">
+                @Model.PRODUCT.BRAND.BrandName
+            </a>
+        </li>
+        <li class="list-group-item pl-0 pr-0 pt-2 pb-2"><b>Model:</b> @Model.PRODUCT.ProductName</li>
+        <li class="list-group-item pl-0 pr-0 pt-2 pb-2"><b>Cpu:</b> @Model.Cpu</li>
+        <li class="list-group-item pl-0 pr-0 pt-2 pb-2"><b>OS:</b> @Model.OSName</li>
+        <li class="list-group-item pl-0 pr-0 pt-2 pb-2"><b>OS Version:</b> @Model.OSVersion</li>
+        <li class="list-group-item pl-0 pr-0 pt-2 pb-2"><b>Screen Size:</b> @Model.SizeDisplay</li>
+        <li class="list-group-item pl-0 pr-0 pt-2 pb-2"><b>Front Camera:</b> @Model.FrontCamera</li>
+        <li class="list-group-item pl-0 pr-0 pt-2 pb-2"><b>Back Camera:</b> @Model.RearCamera</li>
+        <li class="list-group-item pl-0 pr-0 pt-2 pb-2"><b>Ram:</b> @Model.Ram</li>
+        <li class="list-group-item pl-0 pr-0 pt-2 pb-2"><b>Storage:</b> @Model.Rom</li>
+        <li class="list-group-item pl-0 pr-0 pt-2 pb-2"><b>Sim:</b> @Model.SimStatus</li>
+        <li class="list-group-item pl-0 pr-0 pt-2 pb-2"><b>Battery:</b> @Model.Battery</li>
+    </ul>
+}

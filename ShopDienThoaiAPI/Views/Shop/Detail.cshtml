@@ -1,0 +1,163 @@
+﻿@model Models.EF.PRODUCT
+@using Models.EF;
+@{
+    ViewBag.Title = Model.ProductName;
+}
+
+<div class="breadcrumb-area pt-255 pb-170" style="background-image: url(/Assets/img/slider/bg1.jpg)">
+    <div class="container-fluid">
+        <div class="breadcrumb-content text-center">
+            <h2>@Model.ProductName</h2>
+            <ul>
+                <li>
+                    <a href="@Url.Action("Index", "Home")">home</a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Shop", "Shop")">cửa hàng</a>
+                </li>
+                <li>
+                    <a href="@Url.Action("ShopCategory", "Shop", new { id = Model.BRAND.BrandID, url = Model.BRAND.BrandURL})">
+                        @Model.BRAND.BrandName
+                    </a>
+                </li>
+                <li>@Model.ProductName</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="product-details-area fluid-padding-3 ptb-130">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="product-details-img-content">
+                    <div class="product-details-tab mr-40">
+                        <div class="product-details-large tab-content">
+                            <div class="tab-pane active" id="pro-details1">
+                                <div class="easyzoom easyzoom--overlay">
+                                    <a href="javascript:void(0);">
+                                        <img src="@Model.ProductImage" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-details-small nav mt-12 product-dec-slider owl-carousel">
+                            <a class="active" href="#pro-details1">
+                                <img src="@Model.ProductImage" alt="">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="product-details-content">
+                    <h2>@Model.ProductName</h2>
+                    <div class="quick-view-rating">
+                        <i class="fa fa-star reting-color"></i>
+                        <i class="fa fa-star reting-color"></i>
+                        <i class="fa fa-star reting-color"></i>
+                        <i class="fa fa-star reting-color"></i>
+                        <i class="fa fa-star reting-color"></i>
+                    </div>
+                    <div class="product-price">
+                        <h5 class="pd-sub-title">Giá</h5>
+                        @if (Model.PromotionPrice.HasValue)
+                        {
+                            <div class="original-price">@Model.PromotionPrice.Value.ToString("#,##0")₫</div>
+                            <div class="discount-price">
+                                @Model.ProductPrice.ToString("#,##0")₫
+                            </div>
+                        }
+                        else
+                        {
+                            <span class="original-price">@Model.ProductPrice.ToString("#,##0")₫</span>
+                        }
+                    </div>
+                    <div class="product-overview">
+                        <h5 class="pd-sub-title">Tổng quan</h5>
+                        <p>@Model.ProductDescription</p>
+                    </div>
+                    <div class="quickview-plus-minus">
+                        <div class="cart-plus-minus">
+                            <input type="text" value="01" name="qtybutton" class="cart-plus-minus-box" id="quantity-input">
+                        </div>
+                        <div class="quickview-btn-cart">
+                            <a class="btn-style cr-btn" href="javascrip:void(0);" id="submit-btn">
+                                <span>
+                                    <i class="ti-shopping-cart" id="btn-icon"></i> thêm vào giỏ hàng
+                                </span>
+                            </a>
+                        </div>
+                        <div id="alerts"></div>
+                    </div>
+                    <div id="config-detail">
+                        <div class="product-overview">
+                            <h5 class="pd-sub-title">Chi tiết</h5>
+
+                        </div>
+                    </div>
+                    <div class="product-share">
+                        <h5 class="pd-sub-title">Chia sẻ</h5>
+                        <ul>
+                            <li>
+                                <a href="javascript:void(0)"><i class="icofont icofont-social-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)"><i class="icofont icofont-social-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)"><i class="icofont icofont-social-pinterest"></i></a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)"> <i class="icofont icofont-social-instagram"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+
+            $.post("@Url.Action("ConfigDetail", "Shop")", {
+                "id": "@Model.ProductID"
+            }, function (data) {
+                $("#config-detail").append(data);
+            })
+
+            $('#submit-btn').click(function () {
+                $.ajax({
+                    type: "post",
+                    url: "@Url.Action("OrderNow", "Cart")",
+                    data: {
+                        prodId: @Model.ProductID,
+                        quantity: $('#quantity-input').val()
+                    },
+                    success: function (response) {
+                        if (response.Success == true) {
+                            $('#submit-btn').addClass("btn-style--success");
+                            $('#submit-btn span').empty().append('<i class="ti-check"></i> Thành công');
+
+                            $.get("@Url.Action("CartPartial", "Cart")",
+                                function (data) {
+                                    $(".cart-partial").empty();
+                                    $(".cart-partial").html(data);
+                                    $(".icon-cart").on("click", function () {
+                                        $(this).parent().find('.shopping-cart-content').slideToggle('medium');
+                                    });
+                                }
+                            );
+                        } else {
+                            $('#submit-btn').addClass("btn-style--fail");
+                            $('#submit-btn span').empty().append('<i class="ti-close"></i> Không thành công');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}
