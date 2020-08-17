@@ -25,13 +25,16 @@ namespace ShopDienThoaiAPI.Controllers
         [Route("thuong-hieu/{url}-{id:int}")]
         public async Task<ActionResult> ShopCategory(int id, string url, string sort)
         {
-            
-            var brand = await new BrandDAO().LoadByID(id);
-            if (brand == null)
+            string apiurl = "https://localhost:44319/api/brand/getbrand?brandid={0}";
+            apiurl = string.Format(apiurl, id);
+            string json = await new GlobalVariable().GetApiAsync(apiurl);
+            var item = JsonConvert.DeserializeObject<BRAND>(json);
+
+            if (item == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.brand = brand;
+            ViewBag.brand = item;
             ViewBag.sort = sort;
             return View();
         }
@@ -123,7 +126,12 @@ namespace ShopDienThoaiAPI.Controllers
         [HttpPost]
         public async Task<JsonResult> GetProductName(string prefix)
         {
-            return Json(new { name = await new ProductDAO().LoadName(prefix) }, JsonRequestBehavior.AllowGet);
+            string url = "https://localhost:44319/api/product";
+            string json = await new GlobalVariable().GetApiAsync(url);
+            var list = JsonConvert.DeserializeObject<List<PRODUCT>>(json);
+
+            list = list.Where(x => x.ProductName.Contains(prefix)).ToList();
+            return Json(new { name = list }, JsonRequestBehavior.AllowGet);
         }
 
         public async Task<ActionResult> SelectTop(string cond)

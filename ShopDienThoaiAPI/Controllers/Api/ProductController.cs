@@ -24,14 +24,6 @@ namespace ShopDienThoaiAPI.Controllers.Api
             return await new ProductDAO().LoadProduct();
         }
 
-        [Authorize, Route("api/product/authorize")]
-        public async Task<IEnumerable<PRODUCT>> Authorize()
-        {
-            var list = await new ProductDAO().LoadProduct();
-            list = list.Where(x => x.BrandID == 1).ToList();
-            return list;
-        }
-
         public async Task<IEnumerable<PRODUCT>> GetProductList(int brandid, string search, string sort, int pageindex)
         {
             search = HttpUtility.UrlDecode(search);
@@ -44,5 +36,11 @@ namespace ShopDienThoaiAPI.Controllers.Api
         {
             return await new ProductDAO().LoadByID(id);
         }
+
+        //[Route("api/product/getname")]
+        //public async Task<IEnumerable<PRODUCT>> GetProductName(string prefix)
+        //{
+        //    return await new ProductDAO().LoadName(prefix);
+        //}
     }
 }
