@@ -30,22 +30,46 @@
                         @Html.DisplayFor(modelItem => item.OrderDate)
                     </td>
                     <th class="text-center" id="ordername-@item.OrderID">
-                        @*@Html.DisplayFor(modelItem => item.ORDERSTATU.StatusName)*@
+                        blank
                     </th>
-                    <td class="text-center">
+                    <td class="text-center" id="cancelbutton-@item.OrderID">
+                        <button class="btn btn-info">blank</button>
                         @*@if (item.ORDERSTATU.StatusID.Equals(1))
-                        {
-                            <button class="btn btn-danger" id="@item.OrderID"
-                                    onclick="return CancelOrder('@item.OrderID')">
-                                Hủy đơn hàng
-                            </button>
-                        }*@
+                            {
+                                <button class="btn btn-danger" id="@item.OrderID"
+                                        onclick="return CancelOrder('@item.OrderID')">
+                                    Hủy đơn hàng
+                                </button>
+                            }*@
                     </td>
                 </tr>
                 <tr class="hide-table-padding">
                     <td colspan="7">
                         <div id="collapse-@item.OrderID" class="collapse in p-3">
-                            <div class="card card-body" id="@item.OrderID-product-partial">
+                            <div class="card card-body" id="@item.OrderID-product-table">
+                                <table class="table" style="margin-bottom: 0;">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">
+                                                ID Đơn hàng
+                                            </th>
+                                            <th class="text-center">
+                                                Tên Sản Phẩm
+                                            </th>
+                                            <th class="text-center">
+                                                Đơn giá
+                                            </th>
+                                            <th class="text-center">
+                                                Số lượng
+                                            </th>
+                                            <th class="text-center">
+                                                Thành tiền
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </td>
@@ -59,36 +83,52 @@
 {
 <script>
         $(document).ready(function () {
-            $.get(`https://localhost:44319/api/order/getordername`,
+            $.get(`https://localhost:44319/api/order/getorderstatus`,
                 {
                     "orderid": "@item.OrderID"
                 },
                 function (data) {
-                    $("#ordername-@item.OrderID").append(data.StatusName);
+                    var alert = $("#alert-@item.OrderID");
+
+                    if (data.StatusID === 1) {
+                        alert.addClass('alert-secondary');
+                    } else if (data.StatusID === 2) {
+                        alert.addClass('alert-primary');
+                    } else if (data.StatusID === 3) {
+                        alert.addClass('alert-success');
+                    } else if (data.StatusID === 4 || data.StatusID === 5) {
+                        alert.addClass('alert-danger');
+                    };
+
+                    $("#ordername-@item.OrderID").empty().append(data.StatusName);
+                    if (data.StatusID == 1) {
+                        $("#cancelbutton-@item.OrderID").empty().append(`<button class="btn btn-danger" id="@item.OrderID"
+                                    onclick="return CancelOrder('@item.OrderID')">
+                                Hủy đơn hàng
+                            </button>`);
+                    } else {
+                        $("#cancelbutton-@item.OrderID").empty();
+                    }
                 }
             );
 
-
-            @*$.get("@Url.Action("OrderProductList", "Order")",
+            $.get("https://localhost:44319/api/order/getproductlist",
                 {
-                    "OrderID": "@item.OrderID"
+                    "orderid": "@item.OrderID"
                 },
                 function (data) {
-                    $("#@item.OrderID-product-partial").append(data);
-
-                    var alert = $("#alert-@item.OrderID");
-
-                    if (@item.OrderStatusID === 1) {
-                        alert.addClass('alert-secondary');
-                    } else if (@item.OrderStatusID === 2) {
-                        alert.addClass('alert-primary');
-                    } else if (@item.OrderStatusID === 3) {
-                        alert.addClass('alert-success');
-                    } else if (@item.OrderStatusID === 4 || @item.OrderStatusID === 5) {
-                        alert.addClass('alert-danger');
-                    };
+                    console.log(data);
+                    for (i = 0; i < data.length; i++) {
+                        $("#@item.OrderID-product-table > table > tbody").append(`<tr>
+                            <td class="text-center">${data[i].OrderID}</td>
+                            <td class="text-center">${data[i].ProductID}</td>
+                            <td class="text-center">blank</td>
+                            <td class="text-center">${data[i].Quantity}</td>
+                            <td class="text-center">blank</td>
+                            </tr>`);
+                    }
                 }
-            );*@
+            );
         });
 </script>
 }

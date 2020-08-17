@@ -4,23 +4,18 @@
 <table class="table" style="margin-bottom: 0;">
     <tr>
         <th class="text-center">
-            @*@Html.DisplayNameFor(Model => Model.ProductID)*@
             ID Đơn hàng
         </th>
         <th class="text-center">
-            @*@Html.DisplayNameFor(Model => Model.PRODUCT.ProductName)*@
             Tên Sản Phẩm
         </th>
         <th class="text-center">
-            @*@Html.DisplayNameFor(Model => Model.PRODUCT.ProductName)*@
             Đơn giá
         </th>
         <th class="text-center">
-            @*@Html.DisplayNameFor(Model => Model.Quantity)*@
             Số lượng
         </th>
         <th class="text-center">
-            @*@Html.DisplayNameFor(Model => Model.PRODUCT.ProductName)*@
             Thành tiền
         </th>
     </tr>
@@ -38,9 +33,6 @@
                 @Html.DisplayFor(modelItem => item.PRODUCT.ProductName)
             </a>
         </td>
-
-
-
 
         @if (item.PRODUCT.PromotionPrice.HasValue)
         {
@@ -76,11 +68,6 @@
                 @tong2.Value.ToString("#,##0")
             </td>
         }
-
-
-
-
-
     </tr>
     }
 </table>

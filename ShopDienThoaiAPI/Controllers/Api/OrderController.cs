@@ -26,7 +26,7 @@ namespace ShopDienThoaiAPI.Controllers.Api
             return await new OrderDAO().LoadProductOrder(orderid);
         }
 
-        [Authorize, Route("api/order/getordername")]
+        [Authorize, Route("api/order/getorderstatus")]
         public async Task<ORDERSTATU> GetOrderName(int orderid)
         {
             var item = await new OrderDAO().LoadByID(orderid);

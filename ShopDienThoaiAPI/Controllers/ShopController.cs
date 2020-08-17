@@ -125,5 +125,20 @@ namespace ShopDienThoaiAPI.Controllers
         {
             return Json(new { name = await new ProductDAO().LoadName(prefix) }, JsonRequestBehavior.AllowGet);
         }
+
+        public async Task<ActionResult> SelectTop(string cond)
+        {
+            string url = "https://localhost:44319/api/product";
+            string json = await new GlobalVariable().GetApiAsync(url);
+            var list = JsonConvert.DeserializeObject<List<PRODUCT>>(json);
+            int number = 8;
+
+            if (cond.Equals("top"))
+                list = list.OrderBy(x => x.Viewcount).Take(number).ToList();
+            else if (cond.Equals("newest"))
+                list = list.OrderByDescending(x => x.CreatedDate).Take(number).ToList();
+
+            return PartialView("SelectTop", list);
+        }
     }
 }
