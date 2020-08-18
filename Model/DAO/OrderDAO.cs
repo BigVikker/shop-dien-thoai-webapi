@@ -74,9 +74,21 @@ namespace Models.DAO
                  .ToListAsync();
         }
 
-        public async Task<List<ORDERDETAIL>> LoadProductOrder(int OrderID)
+        public async Task<IQueryable<Object>> LoadProductOrder(int OrderID)
         {
-            return await db.ORDERDETAILs.AsNoTracking().Where(x => x.OrderID == OrderID).ToListAsync();
+            var query = from detail in db.ORDERDETAILs
+                        join prod in db.PRODUCTs on detail.ProductID equals prod.ProductID
+                        where detail.OrderID == OrderID
+                        select new
+                        {
+                            Detail = detail,
+                            productid = prod.ProductID,
+                            productname = prod.ProductName,
+                            productprice = prod.ProductPrice,
+                            discount = prod.PromotionPrice
+                        };
+
+            return query;
         }
 
         public async Task<List<T>> LoadProductOrder<T>(int OrderID)
@@ -116,7 +128,8 @@ namespace Models.DAO
             }
         }
 
-        public async Task<int> DeleteOrder(int OrderID){
+        public async Task<int> DeleteOrder(int OrderID)
+        {
             try
             {
                 var order = await db.ORDERs.FindAsync(OrderID);
@@ -129,7 +142,7 @@ namespace Models.DAO
             }
             catch
             {
-                    return 0;
+                return 0;
             }
         }
     }

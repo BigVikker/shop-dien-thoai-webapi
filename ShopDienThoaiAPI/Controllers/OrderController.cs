@@ -47,6 +47,7 @@ namespace ShopDienThoaiAPI.Controllers
             return PartialView("OrderList", list);
         }
 
+        /*
         [Authorize]
         public async Task<ActionResult> OrderProductList(int OrderID)
         {
@@ -60,33 +61,34 @@ namespace ShopDienThoaiAPI.Controllers
             return Json(status, JsonRequestBehavior.AllowGet);
         }
 
-        //[Authorize]
-        //public async Task<JsonResult> GetStatusName(int orderid)
-        //{
-        //    string apiurl = "https://localhost:44319/api/order/getordername?orderid={0}";
-        //    apiurl = string.Format(apiurl, orderid);
-        //    string token = CustomerController.CustomerToken;
+        [Authorize]
+        public async Task<JsonResult> GetStatusName(int orderid)
+        {
+            string apiurl = "https://localhost:44319/api/order/getordername?orderid={0}";
+            apiurl = string.Format(apiurl, orderid);
+            string token = CustomerController.CustomerToken;
 
-        //    var request = new HttpRequestMessage(HttpMethod.Get, apiurl);
-        //    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        //    using (var httpClient = new HttpClient())
-        //    {
-        //        HttpResponseMessage getResponse = await httpClient.GetAsync(apiurl);
-        //        var json = await getResponse.Content.ReadAsStringAsync();
-        //        var status = JsonConvert.DeserializeObject<ORDERSTATU>(json);
+            var request = new HttpRequestMessage(HttpMethod.Get, apiurl);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            using (var httpClient = new HttpClient())
+            {
+                HttpResponseMessage getResponse = await httpClient.GetAsync(apiurl);
+                var json = await getResponse.Content.ReadAsStringAsync();
+                var status = JsonConvert.DeserializeObject<ORDERSTATU>(json);
 
-        //        return Json(new { name = status }, JsonRequestBehavior.AllowGet);
-        //    }
+                return Json(new { name = status }, JsonRequestBehavior.AllowGet);
+            }
 
 
-        //    //using (var client = new HttpClient())
-        //    //{
-        //    //    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        //    //    var response = client.PostAsJsonAsync(new Uri(apiurl).ToString());
+            //using (var client = new HttpClient())
+            //{
+            //    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            //    var response = client.PostAsJsonAsync(new Uri(apiurl).ToString());
 
-        //    //string json = await new GlobalVariable().GetApiAsync(apiurl);
-        //    //    return Json(new { Json = json, Token = token }, JsonRequestBehavior.AllowGet);
-        //    //}
-        //}
+            //string json = await new GlobalVariable().GetApiAsync(apiurl);
+            //    return Json(new { Json = json, Token = token }, JsonRequestBehavior.AllowGet);
+            //}
+        }
+        */
     }
 }

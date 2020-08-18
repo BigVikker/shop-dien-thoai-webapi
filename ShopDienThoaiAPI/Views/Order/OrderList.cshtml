@@ -51,10 +51,10 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center">
-                                                ID Đơn hàng
+                                                ID Sản phẩm
                                             </th>
                                             <th class="text-center">
-                                                Tên Sản Phẩm
+                                                Tên Sản phẩm
                                             </th>
                                             <th class="text-center">
                                                 Đơn giá
@@ -120,10 +120,10 @@
                     console.log(data);
                     for (i = 0; i < data.length; i++) {
                         $("#@item.OrderID-product-table > table > tbody").append(`<tr>
-                            <td class="text-center">${data[i].OrderID}</td>
-                            <td class="text-center">${data[i].ProductID}</td>
-                            <td class="text-center">blank</td>
-                            <td class="text-center">${data[i].Quantity}</td>
+                            <td class="text-center">${data[i].productid}</td>
+                            <td class="text-center">${data[i].productname}</td>
+                            <td class="text-center">${data[i].productprice}</td>
+                            <td class="text-center">${data[i].Detail.Quantity}</td>
                             <td class="text-center">blank</td>
                             </tr>`);
                     }
