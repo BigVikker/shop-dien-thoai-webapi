@@ -26,14 +26,5 @@ namespace ShopDienThoaiAPI.Controllers
                 }
             }
         }
-
-        //public async Task<string> PostApiAsync(string url)
-        //{
-        //    var httpClient = new HttpClient();
-        //    HttpResponseMessage getResponse = await httpClient.PostAsync();
-        //    var responseJsonString = await getResponse.Content.ReadAsStringAsync();
-
-        //    return responseJsonString;
-        //}
     }
 }

@@ -38,14 +38,7 @@ namespace ShopDienThoaiAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                string url = GlobalVariable.url + "customer/login";
-
-                //using (var client = new HttpClient())
-                //{
-                //    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
-                //    var response = await client.GetStringAsync(url);
-
-                //}
+                string url = GlobalVariable.url + "api/customer/login";
 
                 HttpContent content = new FormUrlEncodedContent(new Dictionary<string, string>
                 {
@@ -118,6 +111,7 @@ namespace ShopDienThoaiAPI.Controllers
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
+            CustomerToken = null;
             return RedirectToAction("Login", "Customer");
         }
 

@@ -65,15 +65,6 @@ namespace Models.DAO
             return await db.ORDERs.AsNoTracking().Where(x => x.CustomerID == CustomerID).ToListAsync();
         }
 
-        public async Task<List<T>> LoadOrder<T>(int CustomerID)
-        {
-            var Param = new SqlParameter("@CustomerID", CustomerID);
-
-            return await db.Database
-                 .SqlQuery<T>("SelectOrder @CustomerID", Param)
-                 .ToListAsync();
-        }
-
         public async Task<IQueryable<Object>> LoadProductOrder(int OrderID)
         {
             var query = from detail in db.ORDERDETAILs
@@ -89,15 +80,6 @@ namespace Models.DAO
                         };
 
             return query;
-        }
-
-        public async Task<List<T>> LoadProductOrder<T>(int OrderID)
-        {
-            var Param = new SqlParameter("@OrderID", OrderID);
-
-            return await db.Database
-                 .SqlQuery<T>("SelectOrderProduct @OrderID", Param)
-                 .ToListAsync();
         }
 
         public async Task<int> ChangeOrder(int OrderID, int StatusID)

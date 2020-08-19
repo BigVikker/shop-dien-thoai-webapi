@@ -20,31 +20,60 @@ namespace ShopDienThoaiAPI.Controllers
         [Authorize]
         public async Task<JsonResult> CancelOrder(int OrderID)
         {
-            //5 - cancel
-            var result = await new OrderDAO().ChangeOrder(OrderID, 5);
-            if (result == 0)
+            using (var client = new HttpClient())
             {
-                return Json(new { Success = false }, JsonRequestBehavior.AllowGet);
+                client.BaseAddress = new Uri(GlobalVariable.url + "api/order/cancelorder");
+
+                //HTTP POST
+                var response = await client.PutAsJsonAsync("order", new ORDER()
+                {
+                    OrderID = OrderID
+                });
+
+                if (response.IsSuccessStatusCode)
+                {
+
+                    return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+
+                }
+                else
+                {
+                    return Json(new { Success = false, Msg = response.ReasonPhrase }, JsonRequestBehavior.AllowGet);
+
+                }
             }
-            return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
         }
 
         [Authorize]
         public async Task<ActionResult> OrderList(int? StatusID)
         {
             var membername = HttpContext.User.Identity.Name;
-            var customer = await new CustomerDAO().LoadByUsername(membername);
 
-            //var list = await new OrderDAO().LoadOrder<OrderModel>(customer.CustomerID);
-
-            var list = await new OrderDAO().LoadOrder(customer.CustomerID);
-
-            if (!StatusID.Equals(0))
+            string apiurl = GlobalVariable.url + "api/customer/loadbyusername?username=" + membername;
+            using (var client = new HttpClient())
             {
-                list = list.Where(x => x.OrderStatusID == StatusID).ToList();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", CustomerController.CustomerToken);
+                var response = await client.GetStringAsync(apiurl);
+                var customer = JsonConvert.DeserializeObject<CUSTOMER>(response);
+
+                if (customer != null)
+                {
+                    apiurl = GlobalVariable.url + "api/order/getorder?customerid={0}";
+                    apiurl = string.Format(apiurl, customer.CustomerID);
+
+                    string json = await client.GetStringAsync(apiurl);
+                    var list = JsonConvert.DeserializeObject<List<ORDER>>(json);
+
+                    if (!StatusID.Equals(0))
+                    {
+                        list = list.Where(x => x.OrderStatusID == StatusID).ToList();
+                    }
+                    return PartialView("OrderList", list);
+                }
             }
 
-            return PartialView("OrderList", list);
+
+            return PartialView("OrderList", null);
         }
 
         /*
