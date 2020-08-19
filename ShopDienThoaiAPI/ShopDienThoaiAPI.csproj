@@ -202,7 +202,7 @@
     <Compile Include="Controllers\Api\ProductController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
-    <Compile Include="Controllers\GlobalVariable.cs" />
+    <Compile Include="Common\GlobalVariable.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ShopController.cs" />

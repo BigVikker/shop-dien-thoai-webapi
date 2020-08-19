@@ -25,7 +25,7 @@ namespace ShopDienThoaiAPI.Controllers
         [Route("thuong-hieu/{url}-{id:int}")]
         public async Task<ActionResult> ShopCategory(int id, string url, string sort)
         {
-            string apiurl = "https://localhost:44319/api/brand/getbrand?brandid={0}";
+            string apiurl = GlobalVariable.url + "api/brand/getbrand?brandid={0}";
             apiurl = string.Format(apiurl, id);
             string json = await new GlobalVariable().GetApiAsync(apiurl);
             var item = JsonConvert.DeserializeObject<BRAND>(json);
@@ -45,7 +45,7 @@ namespace ShopDienThoaiAPI.Controllers
         {
             try
             {
-                string apiurl = "https://localhost:44319/api/product?id={0}";
+                string apiurl = GlobalVariable.url + "api/product?id={0}";
                 apiurl = string.Format(apiurl, id);
 
                 string json = await new GlobalVariable().GetApiAsync(apiurl);
@@ -61,7 +61,7 @@ namespace ShopDienThoaiAPI.Controllers
                 return HttpNotFound();
             }
         }
-        
+
         [HttpPost]
         public async Task<ActionResult> ConfigDetail(int id)
         {
@@ -83,7 +83,7 @@ namespace ShopDienThoaiAPI.Controllers
         [HttpGet]
         public async Task<ActionResult> ShopPartial(int? brandid, string search, string sort, int pageindex)
         {
-            string url = "https://localhost:44319/api/product";
+            string url = GlobalVariable.url + "api/product";
             string json = await new GlobalVariable().GetApiAsync(url);
             var list = JsonConvert.DeserializeObject<List<PRODUCT>>(json);
             int pagesize = 16;
@@ -126,7 +126,7 @@ namespace ShopDienThoaiAPI.Controllers
         [HttpPost]
         public async Task<JsonResult> GetProductName(string prefix)
         {
-            string url = "https://localhost:44319/api/product";
+            string url = GlobalVariable.url + "api/product";
             string json = await new GlobalVariable().GetApiAsync(url);
             var list = JsonConvert.DeserializeObject<List<PRODUCT>>(json);
 
@@ -136,7 +136,7 @@ namespace ShopDienThoaiAPI.Controllers
 
         public async Task<ActionResult> SelectTop(string cond)
         {
-            string url = "https://localhost:44319/api/product";
+            string url = GlobalVariable.url + "api/product";
             string json = await new GlobalVariable().GetApiAsync(url);
             var list = JsonConvert.DeserializeObject<List<PRODUCT>>(json);
             int number = 8;

@@ -35,7 +35,7 @@ namespace ShopDienThoaiAPI.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> NavbarCategory()
         {
-            string url = "https://localhost:44319/api/brand";
+            string url = GlobalVariable.url + "api/brand";
 
             string json = await new GlobalVariable().GetApiAsync(url);
 

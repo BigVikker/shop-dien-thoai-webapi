@@ -38,7 +38,7 @@ namespace ShopDienThoaiAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                string url = "https://localhost:44319/api/customer/login";
+                string url = GlobalVariable.url + "customer/login";
 
                 //using (var client = new HttpClient())
                 //{
@@ -57,7 +57,7 @@ namespace ShopDienThoaiAPI.Controllers
                 using (var httpClient = new HttpClient())
                 {
                     var response = await httpClient.PostAsync(url, content);
-                    
+
                     if (response.IsSuccessStatusCode)
                     {
                         var responseString = await response.Content.ReadAsStringAsync();
