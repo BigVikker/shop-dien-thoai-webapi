@@ -13,9 +13,8 @@ namespace ShopDienThoaiAPI.Controllers
 {
     public class CartController : Controller
     {
-        [AllowAnonymous]
         [Route("cart")]
-        public async Task<ActionResult> Cart()
+        public ActionResult Cart()
         {
             return View((List<CartItemModel>)Session["cart"]);
         }
@@ -234,7 +233,7 @@ namespace ShopDienThoaiAPI.Controllers
             return -1;
         }
 
-        public async Task<ActionResult> CartPartial()
+        public ActionResult CartPartial()
         {
             return PartialView("_Cart", (List<CartItemModel>)Session["cart"]);
         }

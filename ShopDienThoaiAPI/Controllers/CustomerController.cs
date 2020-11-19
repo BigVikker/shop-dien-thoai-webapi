@@ -15,6 +15,7 @@ using System.Collections.Specialized;
 using System.Text;
 using System.Web.Script.Serialization;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace ShopDienThoaiAPI.Controllers
 {
@@ -34,7 +35,7 @@ namespace ShopDienThoaiAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> ValidateUser(LoginModel model, bool RememberMe)
+        public async Task<JsonResult> LoginCustomer(LoginModel model)
         {
             if (ModelState.IsValid)
             {
@@ -59,51 +60,121 @@ namespace ShopDienThoaiAPI.Controllers
 
                         CustomerToken = (string)obj["access_token"];
 
-                        FormsAuthentication.SetAuthCookie(model.CustomerUsername, RememberMe);
-                        return Json(new
+                        FormsAuthentication.SetAuthCookie(model.CustomerUsername, true);
+                        return Json(new JsonStatus()
                         {
-                            Success = true,
-                            Username = model.CustomerUsername,
-                            Status = response.StatusCode,
-                            Token = CustomerToken
+                            Status = true,
+                            Message = "Login Success"
                         }, JsonRequestBehavior.AllowGet);
                     }
                     else
                     {
-                        return Json(new { Success = false, Status = response.StatusCode }, JsonRequestBehavior.AllowGet);
+                        return Json(new JsonStatus()
+                        {
+                            Status = false,
+                            Message = "Login Fail"
+                        }, JsonRequestBehavior.AllowGet);
                     }
                 }
             }
 
-            return Json(new { Success = false }, JsonRequestBehavior.AllowGet);
+            return Json(new JsonStatus()
+            {
+                Status = false,
+                Message = "Modelstate invalid",
+                StatusCode = 0
+            }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public async Task<JsonResult> RegisterCustomer(RegisterCustomer model)
         {
-            var dao = new CustomerDAO();
-            if (!await dao.CheckUser(model.CustomerUsername))
+            var json = JsonConvert.SerializeObject(model);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+
+            string url = GlobalVariable.url + "api/customer/register";
+
+            try
             {
-                try
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(url);
+
+                var response = await client.PostAsync(url, data);
+                if (response.IsSuccessStatusCode)
                 {
-                    int result = await new CustomerDAO().Register(new CUSTOMER()
+                    return Json(new JsonStatus()
                     {
-                        CustomerUsername = model.CustomerUsername,
-                        CustomerPassword = model.CustomerPassword,
-                        CustomerName = model.CustomerName,
-                        CustomerPhone = model.CustomerPhone,
-                        CustomerEmail = model.CustomerEmail,
-                        CreatedDate = DateTime.Now
-                    });
-                    return Json(new { ReturnID = 1 }, JsonRequestBehavior.AllowGet);
+                        Status = true,
+                        Message = "Create Success",
+                        StatusCode = (int)response.StatusCode
+                    }, JsonRequestBehavior.AllowGet);
                 }
-                catch
+                else if (response.StatusCode == HttpStatusCode.Conflict)
                 {
-                    return Json(new { ReturnID = 2 }, JsonRequestBehavior.AllowGet);
+                    return Json(new JsonStatus()
+                    {
+                        Status = false,
+                        Message = "Username has already exist",
+                        StatusCode = (int)response.StatusCode
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new JsonStatus()
+                    {
+                        Status = false,
+                        Message = response.ReasonPhrase,
+                        StatusCode = (int)response.StatusCode
+                    }, JsonRequestBehavior.AllowGet);
                 }
             }
-            else
-                return Json(new { ReturnID = 0 }, JsonRequestBehavior.AllowGet);
+            catch
+            {
+                return Json(new JsonStatus()
+                {
+                    Status = false,
+                    Message = "Error while creating account",
+                    StatusCode = 0
+                }, JsonRequestBehavior.AllowGet);
+            }
+            //var dao = new CustomerDAO();
+            //if (!await dao.CheckUser(model.CustomerUsername))
+            //{
+            //    try
+            //    {
+            //        int result = await new CustomerDAO().Register(new CUSTOMER()
+            //        {
+            //            CustomerUsername = model.CustomerUsername,
+            //            CustomerPassword = model.CustomerPassword,
+            //            CustomerName = model.CustomerName,
+            //            CustomerPhone = model.CustomerPhone,
+            //            CustomerEmail = model.CustomerEmail,
+            //            CreatedDate = DateTime.Now
+            //        });
+            //        return Json(new JsonStatus()
+            //        {
+            //            Status = true,
+            //            Message = "Create Success",
+            //            StatusCode = 1
+            //        }, JsonRequestBehavior.AllowGet);
+            //    }
+            //    catch
+            //    {
+            //        return Json(new JsonStatus()
+            //        {
+            //            Status = false,
+            //            Message = "Create Fail",
+            //            StatusCode = 2
+            //        }, JsonRequestBehavior.AllowGet);
+            //    }
+            //}
+            //else
+            //    return Json(new JsonStatus()
+            //    {
+            //        Status = false,
+            //        Message = "Username has already exist",
+            //        StatusCode = 0
+            //    }, JsonRequestBehavior.AllowGet);
         }
 
         [Authorize]
@@ -116,15 +187,11 @@ namespace ShopDienThoaiAPI.Controllers
         }
 
         [Authorize]
-        [Route("profile/{username}")]
-        public async Task<ActionResult> CustomerProfile(string username)
+        [Route("profile")]
+        public async Task<ActionResult> CustomerProfile()
         {
             var membername = HttpContext.User.Identity.Name;
-            if (!membername.Equals(username))
-            {
-                return View(await new CustomerDAO().LoadByUsername(membername));
-            }
-            return View(await new CustomerDAO().LoadByUsername(username));
+            return View(await new CustomerDAO().LoadByUsername(membername));
         }
     }
 }

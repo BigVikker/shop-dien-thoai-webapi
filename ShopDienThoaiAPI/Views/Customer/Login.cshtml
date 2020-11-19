@@ -117,38 +117,28 @@
                     },
                 },
                 submitHandler: function () {
-                    event.preventDefault();
                     $("#login-loader").show();
                     $("#login-button-text").hide();
-                    var data = {
-                        "CustomerUsername": $("#log-name").val(),
-                        "CustomerPassword": $("#log-password").val(),
-                        "RememberMe": $("#remember-me-box").prop('checked')
-                    };
-                    $.ajax({
-                        url: "@Url.Action("ValidateUser", "Customer")",
-                        type: "post",
-                        data: JSON.stringify(data),
-                        dataType: "json",
-                        contentType: "application/json",
-                        success: function (response) {
-                            $("#login-loader").hide();
-                            $("#login-button-text").show();
-                            if (response.Success) {
-                                $("#login-button-text").text("Login Success");
-                                let url = "@Url.Action("CustomerProfile", "Customer", new { username = "cus-username" })";
-                                url = url.replace("cus-username", response.Username);
-                                window.location.href = url;
+
+                    $.post("@Url.Action("LoginCustomer", "Customer")",
+                        {
+                            "CustomerUsername": $("#log-name").val(),
+                            "CustomerPassword": $("#log-password").val(),
+                        }, function (response) {
+                            console.log(response);
+                            if (response.Status) {
+                                $("#login-button-text").text(response.Message);
+                                window.location.href = "@Url.Action("CustomerProfile", "Customer")";
                             }
                             else
-                                $("#login-button-text").text("Login Fail");
-                                window.location.reload();
-                        },
-                        error: function (response) {
-                            $("#login-loader").hide();
+                                $("#login-button-text").text(response.Message);
+                        }).fail(function () {
                             $("#login-button-text").text("Error while logging in!");
-                        }
-                    });
+                        }).done(function () {
+
+                        });
+                    $("#login-loader").hide();
+                    $("#login-button-text").show();
                 }
             });
 
@@ -187,37 +177,26 @@
                 submitHandler: function () {
                     $("#reg-loader").show();
                     $("#reg-button-text").hide();
-                    var data = {
-                        "CustomerUsername": $("#reg-name").val(),
-                        "CustomerPassword": $("#reg-password").val(),
-                        "CustomerName": $("#reg-fullname").val(),
-                        "CustomerPhone": $("#reg-phone").val(),
-                        "CustomerEmail": $("#reg-email").val(),
-                        "CustomerAddress": $("#reg-address").val()
-                    };
-                    $.ajax({
-                        url: "@Url.Action("RegisterCustomer", "Customer")",
-                        type: "post",
-                        data: JSON.stringify(data),
-                        dataType: "json",
-                        contentType: "application/json",
-                        success: function (response) {
-                            $("#reg-loader").hide();
-                            $("#reg-button-text").show();
-                            if (response.ReturnID == 1)
-                                $("#reg-button-text").text("Create Success");
-                                window.location.reload();
-                            if (response.ReturnID == 0)
-                                $("#reg-button-text").text("Username has already exist");
-                            else if (response.ReturnID == 2)
-                                $("#reg-button-text").text("Create Fail");
+                    $.post("@Url.Action("RegisterCustomer", "Customer")",
+                        {
+                            "CustomerUsername": $("#reg-name").val(),
+                            "CustomerPassword": $("#reg-password").val(),
+                            "ConfirmPassword": $("#reg-password").val(),
+                            "CustomerName": $("#reg-fullname").val(),
+                            "CustomerPhone": $("#reg-phone").val(),
+                            "CustomerEmail": $("#reg-email").val(),
+                            "CustomerAddress": $("#reg-address").val()
                         },
-                        error: function (response) {
-                            $("#reg-loader").hide();
-                            $("#reg-button-text").show();
+                        function (response) {
+                            console.log(response);
+                            $("#reg-button-text").text(response.Message);
+                        }).fail(function () {
                             $("#reg-button-text").text("Error while register your account!");
-                        }
-                    });
+                            console.log("Fail");
+                        }).done(function () {
+                        });
+                    $("#reg-loader").hide();
+                    $("#reg-button-text").show();
                 }
             });
         });
