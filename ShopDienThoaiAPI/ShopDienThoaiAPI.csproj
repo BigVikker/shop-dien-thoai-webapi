@@ -76,6 +76,12 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -212,6 +218,7 @@
     <Compile Include="Models\CartItemModel.cs" />
     <Compile Include="Models\CheckoutModel.cs" />
     <Compile Include="Models\CustomerModel.cs" />
+    <Compile Include="Models\JsonStatus.cs" />
     <Compile Include="Models\OrderModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -392,10 +399,12 @@
     <Content Include="Assets\js\waypoints.min.js" />
     <Content Include="Assets\loading-spinner.css" />
     <Content Include="Assets\style.css" />
+    <Content Include="Assets\sweetalert.min.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -485,9 +494,9 @@
     <Content Include="Views\Shop\ConfigDetail.cshtml" />
     <Content Include="Views\Shop\Detail.cshtml" />
     <Content Include="Views\Shop\SelectTop.cshtml" />
-    <Content Include="Views\Shop\Shop.cshtml" />
     <Content Include="Views\Shop\ShopCategory.cshtml" />
     <Content Include="Views\Shop\ShopPartial.cshtml" />
+    <Content Include="Views\Shop\Shop.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

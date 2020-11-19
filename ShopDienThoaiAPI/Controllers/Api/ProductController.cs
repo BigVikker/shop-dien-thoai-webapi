@@ -18,20 +18,13 @@ namespace ShopDienThoaiAPI.Controllers.Api
     public class ProductController : ApiController
     {
         // GET: api/Product
-        [AllowAnonymous]
+        [Route("api/product/getall")]
         public async Task<IEnumerable<PRODUCT>> GetProduct()
         {
             return await new ProductDAO().LoadProduct();
         }
 
-        public async Task<IEnumerable<PRODUCT>> GetProductList(int brandid, string search, string sort, int pageindex)
-        {
-            search = HttpUtility.UrlDecode(search);
-            int pagesize = 16;
-            var list = await new ProductDAO().LoadProduct(brandid, search, sort, pagesize, pageindex);
-            return list;
-        }
-
+        [Route("api/product/detail")]
         public async Task<PRODUCT> GetProductDetail(int id)
         {
             return await new ProductDAO().LoadByID(id);

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<cong_nghe_web.Models.CartItemModel>
+﻿@model IEnumerable<ShopDienThoaiAPI.Models.CartItemModel>
 @{
     ViewBag.Title = "Cart";
 }
@@ -46,7 +46,7 @@
                                     <tr>
                                         <td class="product-thumbnail text-center">
                                             <a href="@Url.Action("Detail", "Shop", new { id = item.product.ProductID, url = item.product.ProductURL })">
-                                                <img src="@item.product.ProductImage" alt="" style="width: 120px;
+                                                <img src="@item.product.ProductImage" alt="" style="width: 80px;
 ">
                                             </a>
                                         </td>

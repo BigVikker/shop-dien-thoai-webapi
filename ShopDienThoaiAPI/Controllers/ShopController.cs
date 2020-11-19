@@ -1,6 +1,7 @@
 ﻿using Models.DAO;
 using Models.EF;
 using Newtonsoft.Json;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +15,21 @@ namespace ShopDienThoaiAPI.Controllers
     {
         [HttpGet]
         [Route("shop")]
-        public ActionResult Shop(string search, string sort)
+        public async Task<ActionResult> Shop(int? page)
         {
-            ViewBag.search = HttpUtility.UrlEncode(search);
-            ViewBag.sort = sort;
-            return View();
+            //ViewBag.search = HttpUtility.UrlEncode(search);
+            //ViewBag.sort = sort;
+            int pageindex = 1;
+            int pagesize = 6;
+            pageindex = page.HasValue ? Convert.ToInt32(page) : 1;
+
+            string url = GlobalVariable.url + "api/product/getall";
+            string json = await new GlobalVariable().GetApiAsync(url);
+            var list = JsonConvert.DeserializeObject<List<PRODUCT>>(json);
+
+            IPagedList<PRODUCT> pagedlist = list.ToPagedList(pageindex, pagesize);
+
+            return View("Shop", pagedlist);
         }
 
         [HttpGet]
@@ -45,7 +56,7 @@ namespace ShopDienThoaiAPI.Controllers
         {
             try
             {
-                string apiurl = GlobalVariable.url + "api/product?id={0}";
+                string apiurl = GlobalVariable.url + "api/product/detail?id={0}";
                 apiurl = string.Format(apiurl, id);
 
                 string json = await new GlobalVariable().GetApiAsync(apiurl);
@@ -78,49 +89,6 @@ namespace ShopDienThoaiAPI.Controllers
             {
                 return HttpNotFound();
             }
-        }
-
-        [HttpGet]
-        public async Task<ActionResult> ShopPartial(int? brandid, string search, string sort, int pageindex)
-        {
-            string url = GlobalVariable.url + "api/product";
-            string json = await new GlobalVariable().GetApiAsync(url);
-            var list = JsonConvert.DeserializeObject<List<PRODUCT>>(json);
-            int pagesize = 16;
-
-            //filter category
-            if (!string.IsNullOrEmpty(brandid.ToString()))
-            {
-                list = list.Where(x => x.BrandID == brandid).ToList();
-            }
-
-            //filter search
-            if (!String.IsNullOrEmpty(search))
-            {
-                list = list.Where(x => x.ProductName.Contains(search)).ToList();
-            }
-            //sort
-            switch (sort)
-            {
-                case "name_desc":
-                    list = list.OrderByDescending(s => s.ProductName).ToList();
-                    break;
-                case "name_asc":
-                    list = list.OrderBy(s => s.ProductName).ToList();
-                    break;
-                case "price_desc":
-                    list = list.OrderByDescending(s => s.ProductPrice).ToList();
-                    break;
-                case "price_asc":
-                    list = list.OrderBy(s => s.ProductPrice).ToList();
-                    break;
-                default:
-                    list = list.OrderBy(s => s.ProductID).ToList();
-                    break;
-            }
-            list = list.Skip(pageindex * pagesize).Take(pagesize).ToList();
-
-            return PartialView("ShopPartial", list);
         }
 
         [HttpPost]

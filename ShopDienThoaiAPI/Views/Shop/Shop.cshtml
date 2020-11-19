@@ -1,4 +1,6 @@
-﻿@{
+﻿@using PagedList.Mvc
+@model  PagedList.IPagedList<Models.EF.PRODUCT>
+@{
     ViewBag.Title = "Cửa hàng";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -73,19 +75,80 @@
                 <div class="grid-list-product-wrapper tab-content">
                     <div class="product-grid product-view tab-pane active">
                         <div class="row" id="product-content">
-                        </div>
-                        <div class="loader" id="loader">
-                            <svg class="circular">
-                                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="5" stroke-miterlimit="10"></circle>
-                            </svg>
+                            @foreach (var item in Model)
+                            {
+                                <div class="product-width col-md-4 col-xl-3 col-lg-4">
+                                    <div class="product-wrapper mb-35">
+                                        <div class="product-img">
+                                            <a href="@Url.Action("Detail", "Shop", new { id = item.ProductID, url = item.ProductURL })">
+                                                <img src="@item.ProductImage" alt="@item.ProductName">
+                                            </a>
+                                            <div class="product-action">
+                                                <a class="action-plus-2 p-action-none addtocart" title="Thêm vào giỏ hàng"
+                                                   href="javascript:void(0);" data-value="@item.ProductID">
+                                                    <i class="ti-shopping-cart"></i>
+                                                </a>
+                                            </div>
+                                            <div class="product-content-wrapper">
+                                                <div class="product-title-spreed">
+                                                    <h4>
+                                                        <a href="@Url.Action("Detail", "Shop", new { id = item.ProductID, url = item.ProductURL })">
+                                                            @item.ProductName
+                                                        </a>
+                                                    </h4>
+                                                </div>
+                                                <div class="product-price">
+                                                    @if (item.PromotionPrice.HasValue)
+                                                    {
+                                                        <span>@item.PromotionPrice.Value.ToString("#,##0")₫</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>@item.ProductPrice.ToString("#,##0")₫</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="product-list-details">
+                                            <h2>
+                                                <a href="@Url.Action("Detail", "Shop", new { id = item.ProductID, url = item.ProductURL })">
+                                                    @item.ProductName
+                                                </a>
+                                            </h2>
+                                            <div class="quick-view-rating">
+                                                <i class="fa fa-star reting-color"></i>
+                                                <i class="fa fa-star reting-color"></i>
+                                                <i class="fa fa-star reting-color"></i>
+                                                <i class="fa fa-star reting-color"></i>
+                                                <i class="fa fa-star reting-color"></i>
+                                            </div>
+                                            <div class="product-price">
+                                                @if (item.PromotionPrice.HasValue)
+                                                {
+                                                    <span>@item.PromotionPrice.Value.ToString("#,##0")₫</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>@item.ProductPrice.ToString("#,##0")₫</span>
+                                                }
+                                            </div>
+                                            <p>@item.ProductDescription</p>
+                                            <div class="shop-list-cart">
+                                                <a class="addtocart" href="javascript:void(0);" data-value="@item.ProductID">
+                                                    <i class="ti-shopping-cart">
+                                                    </i> Add to cart
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
                 <!--Load Btn-->
                 <div class="paginations text-center mt-20">
-                    <div class="btn">
-                        <button id="load-more">Tải thêm</button>
-                    </div>
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
                 </div>
             </div>
         </div>
@@ -99,23 +162,10 @@
         $(document).ready(function () {
             let search = "@ViewBag.search";
             let sort = "@ViewBag.sort";
-            let pageindex = 0;
 
             $.get("@Url.Action("NavbarCategory", "Home")",
                 function (data) {
                     $("#category-content").append(data);
-                }
-            );
-
-            $.get("@Url.Action("ShopPartial", "Shop")",
-                {
-                    "search": search,
-                    "sort": sort,
-                    "pageindex": pageindex
-                },
-                function (data) {
-                    $("#product-content").append(data);
-                    $("#loader").hide();
                 }
             );
 
@@ -144,19 +194,27 @@
                 minLength: 2
             });
 
-            $("#load-more").click(function () {
-                $("#loader").show();
-                pageindex += 1;
-                $.get("@Url.Action("ShopPartial", "Shop")",
-                    {
-                        "search": search,
-                        "sort": sort,
-                        "pageindex": pageindex
-                    },
-                    function (data) {
-                        $("#product-content").append(data);
-                        $("#loader").hide();
-                });
+            $(".addtocart").each(function () {
+                $(this).click(function (event) {
+                    event.preventDefault();
+                    var prodid = $(this).data("value");
+                    $.post("@Url.Action("OrderNow", "Cart")", {
+                        'prodid': prodid,
+                        'quantity': "1"
+                    }, function (data) {
+                        console.log(data);
+                        if (data.Status == true) {
+                            swal("Success", "Add to cart success!", "success")
+                                .then((value) => {
+                                    location.reload();
+                                });
+                        } else if (data.Status == false) {
+                            swal("Failed", data.Message, "error");
+                        }
+                    }).fail(function () {
+                        swal("Failed", "Add to cart failed!", "error");
+                    });
+                })
             });
         })
     </script>

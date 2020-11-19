@@ -117,6 +117,7 @@
                     },
                 },
                 submitHandler: function () {
+                    event.preventDefault();
                     $("#login-loader").show();
                     $("#login-button-text").hide();
                     var data = {

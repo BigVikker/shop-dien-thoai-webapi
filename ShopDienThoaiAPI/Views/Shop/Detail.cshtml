@@ -1,7 +1,6 @@
 ﻿@model Models.EF.PRODUCT
-@using Models.EF;
 @{
-    ViewBag.Title = Model.ProductName;
+    ViewBag.Title = "Detail";
 }
 
 <div class="breadcrumb-area pt-255 pb-170" style="background-image: url(/Assets/img/slider/bg1.jpg)">
@@ -14,11 +13,6 @@
                 </li>
                 <li>
                     <a href="@Url.Action("Shop", "Shop")">cửa hàng</a>
-                </li>
-                <li>
-                    <a href="@Url.Action("ShopCategory", "Shop", new { id = Model.BRAND.BrandID, url = Model.BRAND.BrandURL})">
-                        @Model.BRAND.BrandName
-                    </a>
                 </li>
                 <li>@Model.ProductName</li>
             </ul>
@@ -130,32 +124,24 @@
             })
 
             $('#submit-btn').click(function () {
-                $.ajax({
-                    type: "post",
-                    url: "@Url.Action("OrderNow", "Cart")",
-                    data: {
-                        prodId: @Model.ProductID,
-                        quantity: $('#quantity-input').val()
-                    },
-                    success: function (response) {
-                        if (response.Success == true) {
-                            $('#submit-btn').addClass("btn-style--success");
-                            $('#submit-btn span').empty().append('<i class="ti-check"></i> Thành công');
-
-                            $.get("@Url.Action("CartPartial", "Cart")",
-                                function (data) {
-                                    $(".cart-partial").empty();
-                                    $(".cart-partial").html(data);
-                                    $(".icon-cart").on("click", function () {
-                                        $(this).parent().find('.shopping-cart-content').slideToggle('medium');
-                                    });
-                                }
-                            );
-                        } else {
-                            $('#submit-btn').addClass("btn-style--fail");
-                            $('#submit-btn span').empty().append('<i class="ti-close"></i> Không thành công');
-                        }
+                event.preventDefault();
+                let prodid = "@Model.ProductID";
+                let quantity = $("#quantity-input").val();
+                $.post("@Url.Action("OrderNow", "Cart")", {
+                    'prodid': prodid,
+                    'quantity': quantity
+                }, function (data) {
+                    console.log(data);
+                    if (data.Status == true) {
+                        swal("Success", "Add to cart success!", "success")
+                            .then((value) => {
+                                location.reload();
+                            });
+                    } else {
+                        swal("Failed", data.message, "error");
                     }
+                }).fail(function () {
+                    swal("Failed", "Add to cart failed!", "error");
                 });
             });
         });

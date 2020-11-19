@@ -21,18 +21,4 @@ namespace ShopDienThoaiAPI.Models
             this.quantity = quantity;
         }
     }
-    public class CartSession
-    {
-        public int ProductID { get; set; }
-        public int Quantity { get; set; }
-
-        public CartSession()
-        { }
-
-        public CartSession(int ProductID, int Quantity)
-        {
-            this.ProductID = ProductID;
-            this.Quantity = Quantity;
-        }
-    }
 }
