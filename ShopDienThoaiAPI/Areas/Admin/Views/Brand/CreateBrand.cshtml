@@ -1,0 +1,203 @@
+﻿@model Models.EF.BRAND
+@using Models.DAO;
+
+@{
+    ViewBag.Title = "Create Brand";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Assets/loading-spinner.css" rel="stylesheet" />
+@*<link href="~/Areas/Admin/assets/plugins/sweet-alert/sweetalert2.min.css" rel="stylesheet" type="text/css" />*@
+
+<h2>Create Brand</h2>
+
+<div class="row">
+    <div class="col-lg-3">
+        <form action="#" id="brand-submit-form" method="post" novalidate="novalidate">
+            <div class="form-horizontal">
+                <hr />
+                <div class="form-group">
+                    <label class="control-label col-md-6">Brand Name</label>
+                    <div class="col-md-10">
+                        <input class="form-control text-box single-line" type="text" name="brand-input" id="brand-input">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-6">Brand URL</label>
+                    <div class="col-md-10">
+                        <h5 id="brand-url">(name)</h5>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-primary" id="create-btn" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-sm" id="brand-partial">
+        <div class="loader" id="loader">
+            <svg class="circular">
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="5" stroke-miterlimit="10"></circle>
+            </svg>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script>
+        function slugify(text) {
+          return text.toString().toLowerCase()
+            .replace(/\s+/g, '-')           // Replace spaces with -
+            .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+            .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+            .replace(/^-+/, '')             // Trim - from start of text
+            .replace(/-+$/, '');            // Trim - from end of text
+        }
+
+        function DeleteItem(id) {
+            swal({
+                title: `DELETE item with id: ${id}?`,
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.post("@Url.Action("DeleteBrand", "Brand")", {
+                            "id": id
+                        }, function (data) {
+                            if (data.Status == true) {
+                                swal("Delete success!", "", "success")
+                                    .then((value) => {
+                                        location.reload();
+                                    });
+                            } else {
+                                swal("Delete fail!", "", "error");
+                            }
+                        }).fail(function () {
+                            swal("Error deleting item!", "", "error");
+                        });
+                    }
+                });
+        }
+
+        function SaveEdit(id) {
+            swal({
+                title: `EDIT item with id: ${id}?`,
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type: "post",
+                            url: `@Url.Action("UpdateBrand", "Brand")`,
+                            data: {
+                                "id": id,
+                                "BrandName": $(`#cate-${id}`).val()
+                            },
+                            success: function (data) {
+                                if (data.Status == true) {
+                                    swal("Edit success", "", "success")
+                                        .then((value) => {
+                                            location.reload();
+                                        });
+                                } else if (data.Status == false) {
+                                    swal("Edit fail", data.Message, "error");
+                                }
+                            },
+                            error: function (error) {
+                                swal("Fail editing item", "", "error");
+                            }
+                        });
+                    }
+                });
+        }
+
+        function EditItem(id) {
+            $(`#edit-${id}`).toggleClass('active');
+
+            if ($(`#edit-${id}`).hasClass('active')) {
+                $(`#delete-${id}`).hide();
+                $(`#save-${id}`).show();
+
+                $(`#cate-${id}-input`).show();
+                $(`#cate-${id}-text`).hide();
+
+                $(`#cate-${id}`).removeAttr('readonly');
+
+            } else {
+                $(`#delete-${id}`).show();
+                $(`#save-${id}`).hide();
+
+                $(`#cate-${id}-input`).hide();
+                $(`#cate-${id}-text`).show();
+
+                $(`#cate-${id}`).prop('readonly', 'true');
+            };
+        };
+
+        $("input[name=BrandName]").on('input', function (e) {
+            $("#brand-url").text(slugify($("input[name=BrandName]").val()));
+        })
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#brand-submit-form").validate({
+                rules: {
+                    'brand-input': "required"
+                },
+                messages: {
+                    'brand-input': "Please enter brand name!"
+                },
+                submitHandler: function () {
+                    $("#create-btn").prop("disabled", true);
+                    $.post("@Url.Action("CreateBrand", "Brand")",
+                        {
+                            "BrandName": $("#brand-input").val()
+                        },
+                        function (data) {
+                            console.log(data)
+                            if (data.Status) {
+                                ;
+                                swal("Add success!", "", "success")
+                                    .then((value) => {
+                                        location.reload();
+                                    });
+                            } else {
+                                swal({
+                                    title: "Error " + data.Message,
+                                    icon: "warning"
+                                });
+                            }
+                            
+                        }
+                    ).fail(function () {
+                        swal({
+                            title: "Error ",
+                            icon: "warning"
+                        });
+                    }).done(function () {
+
+                    });
+                    $("#create-btn").prop("disabled", false);
+                }
+            });
+
+            $.post("@Url.Action("BrandList", "Brand")",
+                function (data) {
+                    $("#brand-partial").append(data);
+                    $("#loader").hide();
+                }
+            );
+
+
+        });
+    </script>
+}

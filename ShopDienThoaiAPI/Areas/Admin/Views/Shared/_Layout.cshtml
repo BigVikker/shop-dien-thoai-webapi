@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>@ViewBag.Title</title>
+    <link href="~/Areas/Admin/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Areas/Admin/assets/css/icons.css" rel="stylesheet">
+    <link href="~/Areas/Admin/assets/css/menu.css" rel="stylesheet" type="text/css">
+    <link href="~/Areas/Admin/assets/css/style.css" rel="stylesheet">
+</head>
+
+<body class="sticky-header">
+    <section>
+        @Html.Partial("_LeftBar")
+        <div class="body-content">
+            <div class="header-section">
+                <div class="logo">
+                </div>
+                <a class="toggle-btn"><i class="ti ti-menu"></i></a>
+                <div id="navbar-collapse-1" class="navbar-collapse collapse mega-menu">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <form class="search-content" action="index.html" method="post">
+                                <input type="text" class="form-control mt-3" name="keyword" placeholder="Search...">
+                                <span class="search-button"><i class="ti ti-search"></i></span>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                <div class="notification-wrap">
+                    <div class="right-notification">
+                        <ul class="notification-menu">
+                            <li>
+                                <a href="javascript:;" data-toggle="dropdown">
+                                    <i class="mdi mdi-account"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right profile-menu">
+                                    <a class="dropdown-item" href="#"><i class="mdi mdi-account-circle m-r-5 text-muted"></i> Profile</a>
+                                    <a class="dropdown-item" href="@Url.Action("Logout", "Admin")">
+                                        <i class="mdi mdi-logout m-r-5 text-muted"></i>
+                                        Logout
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            @RenderBody()
+        </div>
+    </section>
+    <script src="~/Areas/Admin/assets/js/jquery-3.2.1.min.js"></script>
+
+    <script src="~/Areas/Admin/assets/js/popper.min.js"></script>
+    <script src="~/Areas/Admin/assets/js/bootstrap.min.js"></script>
+    <script src="~/Areas/Admin/assets/js/jquery.slimscroll.min.js"></script>
+    <script src="~/Areas/Admin/assets/js/slidebars.min.js"></script>
+
+    <script src="~/Areas/Admin/assets/js/jquery.app.js"></script>
+
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

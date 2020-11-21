@@ -1,0 +1,179 @@
+﻿@{ 
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Mannat Themes">
+    <meta name="keyword" content="">
+
+    <title>Admin</title>
+    <link href="~/Areas/Admin/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Areas/Admin/assets/pages/admin/style.css" rel="stylesheet" />
+</head>
+
+<body class="sticky-header">
+    <div id="back">
+        <canvas id="canvas" class="canvas-back"></canvas>
+        <div class="backRight">
+        </div>
+        <div class="backLeft">
+        </div>
+    </div>
+
+    <div id="slideBox">
+        <div class="topLayer">
+            <div class="left">
+                <div class="content">
+                    <h2>Sign Up</h2>
+                    <form id="form-signup" method="post" action="#">
+                        <div class="form-element form-stack">
+                            <label for="username-signup" class="form-label">Username</label>
+                            <input id="username-signup" type="text" name="username-signup">
+                        </div>
+                        <div class="form-element form-stack">
+                            <label for="password-signup" class="form-label">Password</label>
+                            <input id="password-signup" type="password" name="password-signup">
+                        </div>
+                        <div class="form-element form-stack">
+                            <label for="confirm-signup" class="form-label">Confirm Password</label>
+                            <input id="confirm-signup" type="password" name="confirm-signup">
+                        </div>
+                        <div class="form-element form-submit">
+                            <button id="signUp" class="signup" type="submit">Sign up</button>
+                        </div>
+                        <div class="form-element form-submit">
+                            <button id="goLeft" class="signup off">Log In</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="right">
+                <div class="content">
+                    <h2>Login</h2>
+                    <form id="admin-form-login" method="post" action="#">
+                        <div class="form-element form-stack">
+                            <label for="username-login" class="form-label">Username</label>
+                            <input id="username-login" type="text" name="username-login">
+                        </div>
+                        <div class="form-element form-stack">
+                            <label for="password-login" class="form-label">Password</label>
+                            <input id="password-login" type="password" name="password-login">
+                        </div>
+
+                        <h5 class="text-danger" id="login-text"></h5>
+
+                        <input id="show-login-pass" type="checkbox"/> Show Password
+                        <div class="form-element form-submit">
+                            <button id="logIn" class="login" type="submit">Log In</button>
+                        </div>
+                    </form>
+                    <div class="form-element form-submit">
+                        <button id="goRight" class="login off" name="signup">Sign Up</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Areas/Admin/assets/js/jquery-3.2.1.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.11.3/paper-full.min.js'></script>
+    <script src="~/Areas/Admin/assets/pages/admin/script.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#show-login-pass").click(function () {
+                if (!$(this).is(':checked')) {
+                    $("#password-login").attr('type', 'password');
+                } else {
+                    $("#password-login").attr('type', 'text');
+                }
+            });
+
+            $("#form-signup").validate({
+                rules: {
+                    "username-signup": "required",
+                    "password-signup": {
+                        required: true,
+                        minlength: 6
+                    },
+                    "confirm-signup": {
+                        equalTo: "#password-signup"
+                    }
+                },
+                messages: {
+                    "username-signup": "Please enter your username",
+                    "password-signup": {
+                        required: "Please enter your password",
+                        minlength: "Password required minimum 6 length"
+                    },
+                    "confirm-signup": {
+                        equalTo: "Password not match"
+                    }
+                },
+                submitHandler: function () {
+                    var data = {
+                        "UserUsername": $("#username-signup").val(),
+                        "UserPassword": $("#password-signup").val(),
+                    };
+                    @*$.ajax({
+                        url: "@Url.Action("ValidateAdmin", "Admin")",
+                        type: "post",
+                        data: JSON.stringify(data),
+                        dataType: "json",
+                        contentType: "application/json",
+                        success: function (response) {
+                            console.log(response);
+                            if (response.Success == true)
+                                window.location.href = "@Url.Action("Index", "Home")";
+                            else
+                                $('#login-text').text("Login Failed");
+                        }
+                    });*@
+                }
+            });
+
+            $("#admin-form-login").validate({
+                rules: {
+                    "username-login": "required",
+                    "password-login": {
+                        required: true,
+                        minlength: 6
+                    }
+                },
+                messages: {
+                    "username-login": "Please enter your username",
+                    "password-login": {
+                        required: "Please enter your password",
+                        minlength: "Password required minimum 6 length"
+                    }
+                },
+                submitHandler: function () {
+                    var data = {
+                        "UserUsername": $("#username-login").val(),
+                        "UserPassword": $("#password-login").val(),
+                    };
+                    $.ajax({
+                        url: "@Url.Action("ValidateAdmin", "Admin")",
+                        type: "post",
+                        data: JSON.stringify(data),
+                        dataType: "json",
+                        contentType: "application/json",
+                        success: function (response) {
+                            if (response.Success == true)
+                                window.location.href = "@Url.Action("Index", "Home")";
+                            else
+                                $('#login-text').text("Login Failed");
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

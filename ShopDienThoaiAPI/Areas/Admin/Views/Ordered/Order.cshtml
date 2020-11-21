@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "OrderList";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Assets/loading-spinner.css" rel="stylesheet" />
+
+<h2>OrderList</h2>
+
+<div class="row">
+    <div class="col-sm" id="order-partial">
+        <div class="loader" id="loader">
+            <svg class="circular">
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="5" stroke-miterlimit="10"></circle>
+            </svg>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Areas/Admin/assets/js/sweetalert.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.get("@Url.Action("OrderList", "Ordered")", function (data) {
+                $("#order-partial").append(data);
+                $("#loader").hide();
+            })
+
+        });
+
+        function ChangeOrder(id, status) {
+            if ($(`#orderstatus-${id}`).val() == status) {
+                $(`#save-${id}`).hide();
+            } else {
+                $(`#save-${id}`).show();
+            }
+        }
+
+        function SaveEdit(id) {
+            swal({
+                title: `EDIT order with id: ${id}?`,
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type: "post",
+                            url: `@Url.Action("EditOrder", "Ordered")`,
+                            data: {
+                                "Orderid": id,
+                                "StatusID": $(`#orderstatus-${id}`).val()
+                            },
+                            success: function (response) {
+                                if (response.Success == 1) {
+                                    swal("Edited!", "", "success");
+                                    window.location.reload();
+                                } else {
+                                    swal("Edit fail!", "", "error");
+                                }
+                            },
+                            error: function (error) {
+                                swal("Edit fail!", "", "error");
+                            }
+                        });
+                    }
+                });
+        };
+
+    </script>
+}

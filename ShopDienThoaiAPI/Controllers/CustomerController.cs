@@ -16,9 +16,11 @@ using System.Text;
 using System.Web.Script.Serialization;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace ShopDienThoaiAPI.Controllers
 {
+    [HandleError]
     public class CustomerController : Controller
     {
         public static string CustomerToken = "";
@@ -137,44 +139,6 @@ namespace ShopDienThoaiAPI.Controllers
                     StatusCode = 0
                 }, JsonRequestBehavior.AllowGet);
             }
-            //var dao = new CustomerDAO();
-            //if (!await dao.CheckUser(model.CustomerUsername))
-            //{
-            //    try
-            //    {
-            //        int result = await new CustomerDAO().Register(new CUSTOMER()
-            //        {
-            //            CustomerUsername = model.CustomerUsername,
-            //            CustomerPassword = model.CustomerPassword,
-            //            CustomerName = model.CustomerName,
-            //            CustomerPhone = model.CustomerPhone,
-            //            CustomerEmail = model.CustomerEmail,
-            //            CreatedDate = DateTime.Now
-            //        });
-            //        return Json(new JsonStatus()
-            //        {
-            //            Status = true,
-            //            Message = "Create Success",
-            //            StatusCode = 1
-            //        }, JsonRequestBehavior.AllowGet);
-            //    }
-            //    catch
-            //    {
-            //        return Json(new JsonStatus()
-            //        {
-            //            Status = false,
-            //            Message = "Create Fail",
-            //            StatusCode = 2
-            //        }, JsonRequestBehavior.AllowGet);
-            //    }
-            //}
-            //else
-            //    return Json(new JsonStatus()
-            //    {
-            //        Status = false,
-            //        Message = "Username has already exist",
-            //        StatusCode = 0
-            //    }, JsonRequestBehavior.AllowGet);
         }
 
         [Authorize]
@@ -191,7 +155,23 @@ namespace ShopDienThoaiAPI.Controllers
         public async Task<ActionResult> CustomerProfile()
         {
             var membername = HttpContext.User.Identity.Name;
-            return View(await new CustomerDAO().LoadByUsername(membername));
+
+            string apiurl = GlobalVariable.url + "api/customer/loadbyusername?username=" + membername;
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", CustomerController.CustomerToken);
+                var response = await client.GetStringAsync(apiurl);
+                try
+                {
+                    var customer = JsonConvert.DeserializeObject<CUSTOMER>(response);
+                    return View(customer);
+                }
+                catch
+                {
+                    return HttpNotFound();
+                }
+            }
+            //return View(await new CustomerDAO().LoadByUsername(membername));
         }
     }
 }

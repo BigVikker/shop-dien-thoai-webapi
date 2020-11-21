@@ -1,0 +1,57 @@
+﻿@using Models.EF
+
+@{
+    ViewBag.Title = "Create Product";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css'>
+<link href="~/Assets/loading-spinner.css" rel="stylesheet" />
+<h2>Create New Product</h2>
+<hr />
+
+<div >
+    <div class="loader" id="loader">
+        <svg class="circular">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="5" stroke-miterlimit="10"></circle>
+        </svg>
+    </div>
+    <div id="data-partial"></div>
+</div>
+
+
+@section Scripts{
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js'></script>
+    <script>
+        $(document).ready(function () {
+            $.post("@Url.Action("BrandListPartial", "Brand")", function (data) {
+                $("#data-partial").empty();
+                $("#data-partial").append(data);
+                $("#loader").hide();
+            });
+        })
+
+        function CreateProduct(id) {
+            $.post("@Url.Action("CreateProductPartial", "Product")", {
+                "brandid": id
+            }, function (data) {
+                $("#loader").show();
+                $("#data-partial").empty();
+                $("#data-partial").append(data);
+                $("#loader").hide();
+            });
+        }
+
+        function BackToBrand() {
+            $.post("@Url.Action("BrandListPartial", "Brand")", function (data) {
+                $("#loader").show();
+                $("#data-partial").empty();
+                $("#data-partial").append(data);
+                $("#loader").hide();
+            });
+        }   
+
+     
+    </script>
+}
+

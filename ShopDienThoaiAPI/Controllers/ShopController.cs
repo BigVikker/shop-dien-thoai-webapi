@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace ShopDienThoaiAPI.Controllers
 {
+    [HandleError]
     public class ShopController : Controller
     {
         [HttpGet]

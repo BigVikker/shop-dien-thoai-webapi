@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<h2>Customer List</h2>
+
+<div class="row">
+    <div class="col-sm" id="customer-partial">
+        <div class="loader" id="loader">
+            <svg class="circular">
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="5" stroke-miterlimit="10"></circle>
+            </svg>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $.post("@Url.Action("CustomerList", "Customer")",
+                function (data) {
+                    $("#customer-partial").append(data);
+                    $("#loader").hide();
+                });
+        });
+
+        function DeleteItem(id) {
+            $.ajax({
+                type: "post",
+                url: `@Url.Action("DeleteCustomer", "Customer")`,
+                data: "id="+ id,
+                success: function (response) {
+                    if (response.Success = 1) {
+                        window.location.reload();
+                    }
+                }
+            });
+        };
+    </script>
+}
+
+

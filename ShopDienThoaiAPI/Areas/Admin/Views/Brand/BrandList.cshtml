@@ -1,0 +1,93 @@
+﻿@model IEnumerable<Models.EF.BRAND>
+
+
+<link href="~/Areas/Admin/assets/plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/Areas/Admin/assets/plugins/datatables/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/Areas/Admin/assets/plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+<div class="card-body">
+    <table class="table table-bordered" id="category-table">
+        <thead>
+            <tr>
+                <th class="text-center">
+                    ID
+                </th>
+                <th style="display:none;"></th>
+                <th class="text-center">
+                    Name
+                </th>
+                <th class="text-center">
+                    Brand URL
+                </th>
+                <th class="text-center">
+                    Created Date
+                </th>
+                <th class="text-center">Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr id="row-@item.BrandID">
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.BrandID)
+                    </td>
+                    <td class="text-center" id="cate-@item.BrandID-input">
+                        <input class="text-center form-control" id="cate-@item.BrandID"
+                               value="@Html.DisplayFor(modelItem => item.BrandName)"
+                               readonly />
+                    </td>
+                    <td class="text-center" id="cate-@item.BrandID-text">
+                        @Html.DisplayFor(modelItem => item.BrandName)
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.BrandURL)
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.CreatedDate)
+                    </td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-primary"
+                                type="submit" value="Edit"
+                                id="edit-@item.BrandID"
+                                onclick="return EditItem('@item.BrandID')">
+                            <i class="mdi mdi-border-color"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger"
+                                type="submit" value="Delete"
+                                id="delete-@item.BrandID"
+                                onclick="return DeleteItem('@item.BrandID')">
+                            <i class="mdi mdi-delete"></i>
+                        </button>
+                        <button class="btn btn-sm btn-success"
+                                type="submit" value="Save"
+                                id="save-@item.BrandID"
+                                onclick="return SaveEdit('@item.BrandID')">
+                            <i class="mdi mdi-check"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script src="~/Areas/Admin/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/Areas/Admin/assets/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="~/Areas/Admin/assets/plugins/datatables/dataTables.responsive.min.js"></script>
+<script src="~/Areas/Admin/assets/plugins/datatables/responsive.bootstrap4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        @foreach (var item in Model)
+        {
+            <text>
+                $("#save-@item.BrandID").hide();
+                $("#cate-@item.BrandID-input").hide();
+            </text>
+        }
+        $(function () {
+            $('#category-table').DataTable()
+        });
+    });
+</script>

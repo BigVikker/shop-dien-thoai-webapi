@@ -1,0 +1,124 @@
+﻿@model IEnumerable<Models.EF.ORDER>
+
+<link href="~/Areas/Admin/assets/plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/Areas/Admin/assets/plugins/datatables/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/Areas/Admin/assets/plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+<table class="table table-bordered" id="order-table">
+    <thead>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                Tên KH
+            </th>
+            <th>
+                ID KH
+            </th>
+            <th>
+                Địa chỉ
+            </th>
+            <th>
+                Sđt
+            </th>
+            <th>
+                Trạng thái
+            </th>
+            <th>
+                Ngày đặt
+            </th>
+            <th>
+                Tổng
+            </th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerName)
+                </td>
+                @if (item.CustomerID != null)
+                {
+                    <td>@item.CustomerID</td>
+                }
+                else
+                {
+                    <td>null</td>
+                }
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerPhone)
+                </td>
+                <td>
+                    <select id="orderstatus-@item.OrderID" onchange="return ChangeOrder('@item.OrderID', '@item.OrderStatusID')">
+                        <option value="@item.OrderStatusID" selected="selected">@item.ORDERSTATU.StatusName</option>
+                        @*@foreach (var stat in ViewBag.Status)
+                            {
+                                if (stat.StatusID == item.OrderStatusID)
+                                {
+                                    <option value="@stat.StatusID" selected="selected">@stat.StatusName</option>
+                                }
+                                else
+                                {
+                                    <option value="@stat.StatusID">@stat.StatusName</option>
+                                }
+                            }*@
+                    </select>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderDate)
+                </td>
+                <td>
+                    @item.Total.Value.ToString("#,##0")₫
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-success"
+                            type="submit" value="Save"
+                            id="save-@item.OrderID"
+                            onclick="return SaveEdit('@item.OrderID')">
+                        <i class="mdi mdi-check"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="~/Areas/Admin/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/Areas/Admin/assets/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="~/Areas/Admin/assets/plugins/datatables/dataTables.responsive.min.js"></script>
+<script src="~/Areas/Admin/assets/plugins/datatables/responsive.bootstrap4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        @foreach (var item in Model)
+        {
+        <text>
+            $("#save-@item.OrderID").hide();
+            $.get("@Url.Action("StatusList", "Ordered")",
+                {
+                    "id": "@item.OrderStatusID"
+                },
+                function (data) {
+                    var select = $("#orderstatus-@item.OrderID");
+                    for (let i = 0; i < data.length; i++) {
+                        select.append(
+                            `<option value="${data[i].StatusID}">${data[i].StatusName}</option>`);
+                    }
+                }
+            );
+        </text>
+        }
+        $(function () {
+            $('#order-table').DataTable()
+        });
+    });
+</script>

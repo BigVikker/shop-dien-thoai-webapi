@@ -1,0 +1,191 @@
+﻿@model IEnumerable<Models.EF.PRODUCT>
+
+@{
+    ViewBag.Title = "ProductList";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Areas/Admin/assets/plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/Areas/Admin/assets/plugins/datatables/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/Areas/Admin/assets/plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+<div class="card-body">
+    <div class="row">
+        <div class="col-sm">
+            <h1 class="header-title">Product List</h1>
+            <p class="text-muted">
+                @Html.ActionLink("Create New", "CreateProduct")
+            </p>
+        </div>
+    </div>
+    <div class="col-12">
+        <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="table-tab" data-toggle="tab" href="#table_tab" role="tab" aria-controls="table_tab" aria-selected="true">Table View</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="card-tab" data-toggle="tab" href="#card_tab" role="tab" aria-controls="card_tab" aria-selected="false">Card View</a>
+            </li>
+        </ul>
+        <!--Tab-->
+        <div class="tab-content ml-1" id="myTabContent">
+            <div class="tab-pane fade show active" id="table_tab" role="tabpanel" aria-labelledby="table-tab">
+                <table class="table table-bordered" id="product-table">
+                    <thead>
+                        <tr>
+                            <th class="text-center">
+                                ID
+                            </th>
+                            <th>
+                                Image
+                            </th>
+                            <th class="text-center">
+                                Name
+                            </th>
+                            <th class="text-center">
+                                Price
+                            </th>
+                            <th class="text-center">
+                                Stock
+                            </th>
+                            <th class="text-center">
+                                Brand
+                            </th>
+                            <th class="text-center">
+                                Status
+                            </th>
+                            <th class="text-center">
+                                Created Date
+                            </th>
+                            <th class="text-center">
+                                Options
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    <a href="@Url.Action("ProductDetail", "Product", new { id = item.ProductID })">
+                                        @Html.DisplayFor(modelItem => item.ProductID)
+                                    </a>
+                                </td>
+                                <td>
+                                    <img src="@item.ProductImage" style="max-height: 50px;" />
+                                </td>
+                                <td class="text-center">
+                                    <a href="@Url.Action("ProductDetail", "Product", new { id = item.ProductID })">
+                                        @Html.DisplayFor(modelItem => item.ProductName)
+                                    </a>
+                                </td>
+                                <td class="text-center">
+                                    @item.ProductPrice.ToString("#,##0")₫
+                                </td>
+                                <td class="text-center">
+                                    @Html.DisplayFor(modelItem => item.ProductStock)
+                                </td>
+                                <td class="text-center">
+                                    @Html.DisplayFor(modelItem => item.BRAND.BrandName)
+                                </td>
+                                <td class="text-center">
+                                    @Html.DisplayFor(modelItem => item.ProductStatus)
+                                </td>
+                                <td class="text-center">
+                                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-primary"
+                                            type="submit" value="Edit"
+                                            id="edit-@item.ProductID"
+                                            onclick="return EditItem('@item.ProductID')">
+                                        <i class="mdi mdi-border-color"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger"
+                                            type="submit" value="Delete"
+                                            id="delete-@item.ProductID"
+                                            onclick="return DeleteItem('@item.ProductID')">
+                                        <i class="mdi mdi-delete"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-pane fade" id="card_tab" role="tabpanel" aria-labelledby="card-tab">
+                <div class="row">
+                    @foreach (var item in Model)
+                    {
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="card bg-white m-b-30">
+                                <h4 class="card-header">
+                                    <i class="mdi mdi-package-variant-closed"></i>
+                                    <a href="@Url.Action("ProductDetail", "Product", new { id = item.ProductID })">
+                                        @item.ProductName
+                                    </a>
+                                </h4>
+                                <div class="card-body">
+                                    <p class="card-text"><strong>Brand:</strong> @item.BRAND.BrandName</p>
+                                    <p class="card-text"><strong>Price:</strong> @item.ProductPrice.ToString("#,##0")₫</p>
+                                    <p class="card-text"><strong>Url:</strong> @item.ProductURL</p>
+                                    <p class="card-text"><strong>Date:</strong> @item.CreatedDate</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Areas/Admin/assets/js/sweetalert.min.js"></script>
+    <script src="~/Areas/Admin/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Areas/Admin/assets/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Areas/Admin/assets/plugins/datatables/dataTables.responsive.min.js"></script>
+    <script src="~/Areas/Admin/assets/plugins/datatables/responsive.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(function () {
+                $('#product-table').DataTable();
+            });
+        });
+
+        function DeleteItem(id) {
+            swal({
+                title: `DELETE item with id: ${id}?`,
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type: "post",
+                            url: `@Url.Action("DeleteProduct", "Product")`,
+                            data: "id=" + id,
+                            success: function (response) {
+                                console.log(response);
+                                if (response.Success == 1) {
+                                    swal("Deleted!", "", "success");
+                                    window.location.reload();
+                                } else {
+                                    swal("Delete fail!", "", "error");
+                                }
+                            },
+                            error: function (error) {
+                                swal("Error occurred!", "", "error");
+                            },
+                        });
+                    }
+                });
+        };
+
+        function EditItem(id) {
+            window.location.href = `@Url.Action("ProductDetail", "Product")/${id}`;
+        };
+    </script>
+}

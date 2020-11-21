@@ -14,6 +14,7 @@ using Models.EF;
 
 namespace ShopDienThoaiAPI.Controllers
 {
+    [HandleError]
     public class OrderController : Controller
     {
         [HttpPost]
