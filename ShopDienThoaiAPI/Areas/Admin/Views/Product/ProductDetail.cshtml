@@ -21,14 +21,14 @@
         </div>
     </div>
 
-    <div class="row">
+    @*<div class="row">
         <div class="input-field col-lg-2 s12">
             <label>Brand</label>
         </div>
         <div class="input-field col s12">
             <input readonly value="@Html.DisplayFor(model => model.BRAND.BrandName)">
         </div>
-    </div>
+    </div>*@
 
     <div class="row">
         <div class="input-field col-lg-2 s12">
@@ -41,21 +41,13 @@
 
     <div class="row">
         <div class="input-field col-lg-2 s12">
-            <label>URL</label>
-        </div>
-        <div class="input-field col s12">
-            <input id="product-url" type="text" readonly value="@Model.ProductURL">
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="input-field col-lg-2 s12">
             <label>Price</label>
         </div>
         <div class="input-field col s12">
             <input id="product-price" name="product-price" type="number" class="validate" value="@Html.DisplayFor(model => model.ProductPrice)">
         </div>
     </div>
+
     <div class="row">
         <div class="input-field col-lg-2 s12">
             <label>Promotion Price</label>
@@ -72,6 +64,7 @@
             <input id="product-stock" name="product-stock" type="number" class="validate" value="@Html.DisplayFor(model => model.ProductStock)">
         </div>
     </div>
+
     <div class="row">
         <div class="input-field col-lg-2 s12">
             <label>Show Image 1</label>
@@ -80,6 +73,7 @@
             <input id="product-image" type="text" class="validate" value="@Html.DisplayFor(model => model.ProductImage)">
         </div>
     </div>
+
     <div class="row">
         <div class="input-field col-lg-2 s12">
             <label>Status</label>
@@ -89,6 +83,7 @@
             <label for="status-checkbox" id="checkbox-label">Active</label>
         </div>
     </div>
+
     <div class="row">
         <div class="input-field col-lg-2 s12">
             <label>Decription</label>
@@ -104,7 +99,6 @@
 </form>
 
 @section Scripts{
-    <script src="~/Areas/Admin/assets/js/sweetalert.min.js"></script>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js'></script>
     <script>
@@ -151,7 +145,7 @@
                 },
                 submitHandler: function () {
                     let data = {
-                        "ProductID": "@Model.ProductID",
+                        "id": "@Model.ProductID",
                         "ProductName": $("#product-name").val(),
                         "ProductPrice": $("#product-price").val(),
                         "PromotionPrice": $("#product-promotion").val(),
@@ -169,14 +163,14 @@
                         contentType: "application/json",
                         success: function (response) {
                             console.log(response);
-                            if (response.Success) {
-                                swal("Update successfuly", "", "success")
+                            if (data.Status == true) {
+                                swal("Edit success", "", "success")
                                     .then((value) => {
                                         location.reload();
-                                });
+                                    });
+                            } else if (data.Status == false) {
+                                swal("Edit fail", data.Message, "error");
                             }
-                            else
-                                swal("Update fail!", "", "success");
                         },
                         error: function (error) {
                             swal("Error updating product!", "", "success");

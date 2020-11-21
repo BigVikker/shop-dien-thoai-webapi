@@ -168,7 +168,6 @@
                     "PromotionPrice": $("#product-promotion").val(),
                     "ProductStock": $("#product-stock").val(),
                     "BrandID": "@Model.BrandID",
-                    "Size": $("#select-size-multi").val(),
                     "ProductImage": $("#product-image").val(),
                     "ProductDescription": $("#text-area").val(),
                     "ProductStatus": $("#status-checkbox").is(":checked")
@@ -181,8 +180,8 @@
                     dataType: "json",
                     contentType: "application/json",
                     success: function (response) {
-                        if (response.Success && $('#create-configuation').is(':checked')) {
-                            let config = {
+                        @*if (response.Status && $('#create-configuation').is(':checked')) {
+                           let config = {
                                 "OSName": $("#OSName").val(),
                                 "OSVersion": $("#OSversion").val(),
                                 "SizeDisplay": $("#Display").val(),
@@ -214,7 +213,8 @@
                             });
                         } else if (response.Success) {
                             swal("Created product!", "", "success");
-                        }
+                        }*@
+                        console.log(response);
                     },
                     error: function (error) {
                         swal("Error creating product !", "", "error");

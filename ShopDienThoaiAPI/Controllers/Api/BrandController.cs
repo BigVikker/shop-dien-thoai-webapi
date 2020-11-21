@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -28,28 +27,23 @@ namespace ShopDienThoaiAPI.Controllers.Api
         public async Task<IHttpActionResult> CreateBrand(BRAND brand)
         {
             if (!ModelState.IsValid)
-                return Content(System.Net.HttpStatusCode.BadRequest, "Not invalid model");
+                return Content(HttpStatusCode.BadRequest, "Not invalid model");
             try
             {
-                int result = await new BrandDAO().CreateBrand(new BRAND()
-                {
-                    BrandName = brand.BrandName,
-                    BrandURL = SlugGenerator.SlugGenerator.GenerateSlug(brand.BrandName),
-                    CreatedDate = DateTime.Now
-                });
+                int result = await new BrandDAO().CreateBrand(brand);
                 if (result > 0)
                 {
                     return Ok();
                 }
                 else
                 {
-                    var item = Content(System.Net.HttpStatusCode.BadRequest, "Create Fail");
+                    var item = Content(HttpStatusCode.BadRequest, "Create Fail");
                     return item;
                 }
             }
             catch
             {
-                return Content(System.Net.HttpStatusCode.BadRequest, "Create Fail");
+                return Content(HttpStatusCode.BadRequest, "Create Fail");
             }
         }
 
@@ -58,20 +52,19 @@ namespace ShopDienThoaiAPI.Controllers.Api
         public async Task<IHttpActionResult> UpdateBrand(int id, BRAND brand)
         {
             if (!ModelState.IsValid)
-                return Content(System.Net.HttpStatusCode.BadRequest, "Not invalid model");
+                return Content(HttpStatusCode.BadRequest, "Not invalid model");
             try
             {
-                brand.BrandURL = SlugGenerator.SlugGenerator.GenerateSlug(brand.BrandName);
-                int result = await new BrandDAO().EditBrand(brand, id);
+                int result = await new BrandDAO().UpdateBrand(id, brand);
                 if (result == 0)
                 {
-                    return Content(System.Net.HttpStatusCode.Conflict, "Not updated");
+                    return Content(HttpStatusCode.Conflict, "Not updated");
                 }
                 return Ok();
             }
             catch
             {
-                return Content(System.Net.HttpStatusCode.BadRequest, "Update Fail");
+                return Content(HttpStatusCode.BadRequest, "Update Fail");
             }
         }
 
@@ -86,11 +79,11 @@ namespace ShopDienThoaiAPI.Controllers.Api
                 {
                     return Ok();
                 }
-                return Content(System.Net.HttpStatusCode.Conflict, "Not deleted");
+                return Content(HttpStatusCode.Conflict, "Not deleted");
             }
             catch
             {
-                return Content(System.Net.HttpStatusCode.BadRequest, "Delete Fail");
+                return Content(HttpStatusCode.BadRequest, "Delete Fail");
             }
         }
     }

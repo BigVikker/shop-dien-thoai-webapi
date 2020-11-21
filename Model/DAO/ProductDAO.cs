@@ -25,13 +25,27 @@ namespace Models.DAO
 
         }
 
-        public async Task<int> CreateProduct(PRODUCT model)
+        public async Task<int> CreateProduct(PRODUCT product)
         {
             try
             {
-                db.PRODUCTs.Add(model);
+                var prod = new PRODUCT
+                {
+                    ProductName = product.ProductName,
+                    ProductPrice = product.ProductPrice,
+                    ProductDescription = product.ProductDescription,
+                    PromotionPrice = product.PromotionPrice,
+                    ProductStock = product.ProductStock,
+                    ProductURL = SlugGenerator.SlugGenerator.GenerateSlug(product.ProductName),
+                    ProductImage = product.ProductImage,
+                    ProductStatus = product.ProductStatus,
+                    BrandID = product.BrandID,
+                    CreatedDate = DateTime.Now
+                };
+
+                db.PRODUCTs.Add(prod);
                 await db.SaveChangesAsync();
-                return model.ProductID;
+                return prod.ProductID;
             }
             catch
             {
@@ -39,31 +53,30 @@ namespace Models.DAO
             }
         }
 
-        public async Task<int> UpdateProduct(PRODUCT model)
+        public async Task<int> UpdateProduct(int id, PRODUCT model)
         {
-            var product = await db.PRODUCTs.FindAsync(model.ProductID);
-            if (product == null)
-                return 0;
+            try
+            {
+                var product = await db.PRODUCTs.FindAsync(id);
+                if (product == null)
+                    return 0;
 
-            product.ProductName = model.ProductName;
-            product.ProductDescription = model.ProductDescription;
-            product.ProductPrice = model.ProductPrice;
-            product.PromotionPrice = model.PromotionPrice;
-            product.ProductImage = model.ProductImage;
-            product.ProductStock = model.ProductStock;
-            product.ProductURL = model.ProductURL;
-            product.ProductStatus = model.ProductStatus;
+                product.ProductName = model.ProductName;
+                product.ProductDescription = model.ProductDescription;
+                product.ProductPrice = model.ProductPrice;
+                product.PromotionPrice = model.PromotionPrice;
+                product.ProductImage = model.ProductImage;
+                product.ProductStock = model.ProductStock;
+                product.ProductURL = SlugGenerator.SlugGenerator.GenerateSlug(model.ProductName);
+                product.ProductStatus = model.ProductStatus;
 
-            await db.SaveChangesAsync();
-            return product.ProductID;
-            //try
-            //{
-                
-            //}
-            //catch
-            //{
-            //    return 0;
-            //}
+                await db.SaveChangesAsync();
+                return product.ProductID;
+            }
+            catch
+            {
+                return -1;
+            }
         }
 
         public async Task<bool> DeleteProduct(int ID)
@@ -114,7 +127,8 @@ namespace Models.DAO
         }
 
         public async Task<List<PRODUCT>> LoadName(string prefix)
-        {;
+        {
+            ;
             return await db.PRODUCTs.AsNoTracking().Where(x => x.ProductName.Contains(prefix)).ToListAsync();
         }
 

@@ -34,13 +34,19 @@ namespace Models.DAO
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<int> CreateBrand(BRAND cate)
+        public async Task<int> CreateBrand(BRAND brand)
         {
             try
             {
-                db.BRANDs.Add(cate);
+                BRAND item = new BRAND()
+                {
+                    BrandName = brand.BrandName,
+                    BrandURL = SlugGenerator.SlugGenerator.GenerateSlug(brand.BrandName),
+                    CreatedDate = DateTime.Now
+                };
+                db.BRANDs.Add(item);
                 await db.SaveChangesAsync();
-                return cate.BrandID;
+                return item.BrandID;
             }
             catch
             {
@@ -63,7 +69,7 @@ namespace Models.DAO
             }
         }
 
-        public async Task<int> EditBrand(BRAND cate, int ID)
+        public async Task<int> UpdateBrand(int ID, BRAND brand)
         {
             try
             {
@@ -72,8 +78,8 @@ namespace Models.DAO
                 {
                     return 0;
                 }
-                item.BrandName = cate.BrandName;
-                item.BrandURL = cate.BrandURL;
+                item.BrandName = brand.BrandName;
+                item.BrandURL = SlugGenerator.SlugGenerator.GenerateSlug(brand.BrandName);
                 await db.SaveChangesAsync();
                 return item.BrandID;
             }

@@ -1,6 +1,5 @@
 ﻿using Models.DAO;
 using Models.EF;
-using ShopDienThoaiAPI.Areas.Admin.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;

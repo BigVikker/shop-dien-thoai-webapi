@@ -86,7 +86,7 @@
                                     @Html.DisplayFor(modelItem => item.ProductStock)
                                 </td>
                                 <td class="text-center">
-                                    @Html.DisplayFor(modelItem => item.BRAND.BrandName)
+                                    @*@Html.DisplayFor(modelItem => item.BRAND.BrandName)*@
                                 </td>
                                 <td class="text-center">
                                     @Html.DisplayFor(modelItem => item.ProductStatus)
@@ -127,7 +127,7 @@
                                     </a>
                                 </h4>
                                 <div class="card-body">
-                                    <p class="card-text"><strong>Brand:</strong> @item.BRAND.BrandName</p>
+                                    @*<p class="card-text"><strong>Brand:</strong> @item.BRAND.BrandName</p>*@
                                     <p class="card-text"><strong>Price:</strong> @item.ProductPrice.ToString("#,##0")₫</p>
                                     <p class="card-text"><strong>Url:</strong> @item.ProductURL</p>
                                     <p class="card-text"><strong>Date:</strong> @item.CreatedDate</p>
@@ -168,10 +168,11 @@
                             url: `@Url.Action("DeleteProduct", "Product")`,
                             data: "id=" + id,
                             success: function (response) {
-                                console.log(response);
-                                if (response.Success == 1) {
-                                    swal("Deleted!", "", "success");
-                                    window.location.reload();
+                                if (data.Status == true) {
+                                    swal("Delete success!", "", "success")
+                                        .then((value) => {
+                                            location.reload();
+                                        });
                                 } else {
                                     swal("Delete fail!", "", "error");
                                 }
