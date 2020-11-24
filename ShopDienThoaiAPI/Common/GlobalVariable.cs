@@ -10,7 +10,7 @@ namespace ShopDienThoaiAPI.Controllers
 {
     public class GlobalVariable
     {
-        public static string url = "https://localhost:44319/";
+        public const string url = "https://localhost:44319/";
         public async Task<string> GetApiAsync(string posturl)
         {
             using (HttpClient httpClient = new HttpClient())

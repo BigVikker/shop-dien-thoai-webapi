@@ -18,8 +18,8 @@ namespace ShopDienThoaiAPI.Common
             OAuthAuthorizationServerOptions options = new OAuthAuthorizationServerOptions()
             {
                 AllowInsecureHttp = true,
-                TokenEndpointPath = new PathString("/api/customer/login"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(30),
+                TokenEndpointPath = new PathString("/api/token"),
+                AccessTokenExpireTimeSpan = TimeSpan.FromHours(3),
                 Provider = myprovider
             };
 

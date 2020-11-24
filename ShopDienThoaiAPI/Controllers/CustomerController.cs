@@ -41,7 +41,7 @@ namespace ShopDienThoaiAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                string url = GlobalVariable.url + "api/customer/login";
+                string url = GlobalVariable.url + "api/token";
 
                 HttpContent content = new FormUrlEncodedContent(new Dictionary<string, string>
                 {
