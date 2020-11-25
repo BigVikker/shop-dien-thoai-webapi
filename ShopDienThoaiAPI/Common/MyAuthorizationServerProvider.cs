@@ -19,18 +19,38 @@ namespace ShopDienThoaiAPI.Common
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
-            var ctx = await new CustomerDAO().LoginAsync(context.UserName, context.Password);
-            if (ctx == true)
+            string[] subs = context.UserName.Split('|');
+            var ctx = false;
+            if (subs[0].Equals("admin"))
             {
-                identity.AddClaim(new Claim(ClaimTypes.Role, "user"));
-                identity.AddClaim(new Claim(context.UserName, context.Password));
-                context.Validated(identity);
-            }
-            else
+                ctx = await new CustomerDAO().LoginAsync(subs[1], context.Password);
+                if (ctx == true)
+                {
+                    identity.AddClaim(new Claim(ClaimTypes.Role, "admin"));
+                    identity.AddClaim(new Claim(subs[1], context.Password));
+                    context.Validated(identity);
+                }
+                else
+                {
+                    context.SetError("invalid_grant", "Provided is incorrect");
+                    return;
+                }
+            } else if(subs[0].Equals("customer"))
             {
-                context.SetError("invalid_grant", "Provided is incorrect");
-                return;
+                ctx = await new AdminDAO().LoginAsync(subs[1], context.Password);
+                if (ctx == true)
+                {
+                    identity.AddClaim(new Claim(ClaimTypes.Role, "customer"));
+                    identity.AddClaim(new Claim(subs[1], context.Password));
+                    context.Validated(identity);
+                }
+                else
+                {
+                    context.SetError("invalid_grant", "Provided is incorrect");
+                    return;
+                }
             }
+            
         }
     }
 }

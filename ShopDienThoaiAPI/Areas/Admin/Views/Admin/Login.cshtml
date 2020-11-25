@@ -165,7 +165,8 @@
                         dataType: "json",
                         contentType: "application/json",
                         success: function (response) {
-                            if (response.Success == true)
+                            console.log(response);
+                            if (response.Status)
                                 window.location.href = "@Url.Action("Index", "Home")";
                             else
                                 $('#login-text').text("Login Failed");

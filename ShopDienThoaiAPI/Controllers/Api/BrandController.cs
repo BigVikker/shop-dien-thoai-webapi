@@ -22,6 +22,7 @@ namespace ShopDienThoaiAPI.Controllers.Api
             return await new BrandDAO().LoadByID(brandid);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [Route("api/brand/create")]
         public async Task<IHttpActionResult> CreateBrand(BRAND brand)
@@ -47,6 +48,7 @@ namespace ShopDienThoaiAPI.Controllers.Api
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPut]
         [Route("api/brand/update")]
         public async Task<IHttpActionResult> UpdateBrand(int id, BRAND brand)
@@ -68,6 +70,7 @@ namespace ShopDienThoaiAPI.Controllers.Api
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpDelete]
         [Route("api/brand/delete")]
         public async Task<IHttpActionResult> DeleteBrand(int id)

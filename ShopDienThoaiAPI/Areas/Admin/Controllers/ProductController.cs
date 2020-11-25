@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -53,6 +54,7 @@ namespace ShopDienThoaiAPI.Areas.Admin.Controllers
             try
             {
                 var client = new HttpClient();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AdminController.AdminToken);
                 client.BaseAddress = new Uri(url);
 
                 var response = await client.PostAsync(url, data);
@@ -97,6 +99,7 @@ namespace ShopDienThoaiAPI.Areas.Admin.Controllers
             try
             {
                 var client = new HttpClient();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AdminController.AdminToken);
                 client.BaseAddress = new Uri(url);
 
                 var response = await client.PutAsync(url, data);
@@ -138,6 +141,7 @@ namespace ShopDienThoaiAPI.Areas.Admin.Controllers
             try
             {
                 var client = new HttpClient();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AdminController.AdminToken);
                 client.BaseAddress = new Uri(url);
 
                 var response = await client.DeleteAsync(url);

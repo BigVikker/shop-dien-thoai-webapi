@@ -12,14 +12,14 @@ namespace ShopDienThoaiAPI.Areas.Admin.Controllers
     {
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            //var session = Session["AdminLogin"] as ADMIN;
-            //if (session == null)
-            //{
-            //    filterContext.Result = new RedirectToRouteResult(
-            //        new RouteValueDictionary(
-            //            new { controller = "Admin", action = "Login", Area = "Admin" })
-            //        );
-            //}
+            var session = Session["AdminLogin"] as ADMIN;
+            if (session == null)
+            {
+                filterContext.Result = new RedirectToRouteResult(
+                    new RouteValueDictionary(
+                        new { controller = "Admin", action = "Login", Area = "Admin" })
+                    );
+            }
             base.OnActionExecuting(filterContext);
         }
     }

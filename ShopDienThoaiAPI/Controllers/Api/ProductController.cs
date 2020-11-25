@@ -24,6 +24,7 @@ namespace ShopDienThoaiAPI.Controllers.Api
             return await new ProductDAO().LoadByID(id);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [Route("api/product/create")]
         public async Task<IHttpActionResult> CreateProduct(PRODUCT product)
@@ -44,6 +45,7 @@ namespace ShopDienThoaiAPI.Controllers.Api
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPut]
         [Route("api/product/update")]
         public async Task<IHttpActionResult> UpdateProduct(int id, PRODUCT product)
@@ -65,6 +67,7 @@ namespace ShopDienThoaiAPI.Controllers.Api
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpDelete]
         [Route("api/product/delete")]
         public async Task<IHttpActionResult> DeleteProduct(int id)

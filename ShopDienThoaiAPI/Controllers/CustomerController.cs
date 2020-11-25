@@ -46,7 +46,7 @@ namespace ShopDienThoaiAPI.Controllers
                 HttpContent content = new FormUrlEncodedContent(new Dictionary<string, string>
                 {
                     {"grant_type", "password"},
-                    {"username", model.CustomerUsername},
+                    {"username", "customer|"+model.CustomerUsername},
                     {"password", model.CustomerPassword},
                 });
 
