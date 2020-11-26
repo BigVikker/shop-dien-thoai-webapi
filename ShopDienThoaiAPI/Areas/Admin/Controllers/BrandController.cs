@@ -27,28 +27,6 @@ namespace ShopDienThoaiAPI.Areas.Admin.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateBrand(BRAND model)
         {
-            //string apiurl = GlobalVariable.url + "api/customer/loadbyusername?username=" + membername;
-            //using (var client = new HttpClient())
-            //{
-            //    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", CustomerController.CustomerToken);
-            //    var response = await client.GetStringAsync(apiurl);
-            //    var customer = JsonConvert.DeserializeObject<CUSTOMER>(response);
-
-            //    if (customer != null)
-            //    {
-            //        apiurl = GlobalVariable.url + "api/order/getorder?customerid={0}";
-            //        apiurl = string.Format(apiurl, customer.CustomerID);
-
-            //        string json = await client.GetStringAsync(apiurl);
-            //        var list = JsonConvert.DeserializeObject<List<ORDER>>(json);
-
-            //        if (!StatusID.Equals(0))
-            //        {
-            //            list = list.Where(x => x.OrderStatusID == StatusID).ToList();
-            //        }
-            //        return PartialView("OrderList", list);
-            //    }
-            //}
             var json = JsonConvert.SerializeObject(model);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
 
