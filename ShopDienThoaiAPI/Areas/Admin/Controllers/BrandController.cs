@@ -27,9 +27,9 @@ namespace ShopDienThoaiAPI.Areas.Admin.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateBrand(BRAND model)
         {
+            
             var json = JsonConvert.SerializeObject(model);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
-
             string url = GlobalVariable.url + "api/brand/create";
 
             try
