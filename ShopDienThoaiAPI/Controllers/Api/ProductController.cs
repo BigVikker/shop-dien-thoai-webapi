@@ -10,8 +10,6 @@ namespace ShopDienThoaiAPI.Controllers.Api
     public class ProductController : ApiController
     {
         // GET: api/Product
-        [HttpGet]
-        [Route("api/product/getall")]
         public async Task<IEnumerable<PRODUCT>> GetProduct()
         {
             return await new ProductDAO().LoadProduct();

@@ -2,6 +2,7 @@
 using Models.EF;
 using ShopDienThoaiAPI.Models;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -9,6 +10,12 @@ namespace ShopDienThoaiAPI.Controllers.Api
 {
     public class CustomerController : ApiController
     {
+        [Route("api/customer/getall")]
+        public async Task<IEnumerable<CUSTOMER>> GetCustomer()
+        {
+            return await new CustomerDAO().LoadCustomer();
+        }
+
         [Authorize(Roles = "customer")]
         [HttpGet]
         [Route("api/customer/loadbyusername")]
@@ -16,6 +23,8 @@ namespace ShopDienThoaiAPI.Controllers.Api
         {
             return await new CustomerDAO().LoadByUsername(username);
         }
+
+        
 
         [HttpPost]
         [Route("api/customer/register")]

@@ -22,6 +22,11 @@ namespace Models.DAO
             return await db.CUSTOMERs.AsNoTracking().ToListAsync();
         }
 
+        public async Task<List<CUSTOMER>> GetAll()
+        {
+            return await db.CUSTOMERs.AsNoTracking().ToListAsync();
+        }
+
         public async Task<bool> DeleteCustomer(int ID)
         {
             try
