@@ -13,7 +13,7 @@ namespace ShopDienThoaiAPI.Controllers.Api
     //[Authorize]
     public class OrderController : ApiController
     {
-        [Authorize]
+        //[Authorize]
         [Route("api/order/getorder")]
         public async Task<IEnumerable<ORDER>> GetOrder(int customerid)
         {
@@ -21,7 +21,7 @@ namespace ShopDienThoaiAPI.Controllers.Api
             return item;
         }
 
-        [Authorize]
+        //[Authorize]
         [Route("api/order/getorderlist")]
         public async Task<IEnumerable<ORDER>> GetOrderList(int customerid)
         {
@@ -29,14 +29,14 @@ namespace ShopDienThoaiAPI.Controllers.Api
             return list;
         }
 
-        [Authorize]
+        //[Authorize]
         [Route("api/order/getproductlist")]
         public async Task<IQueryable<Object>> GetProductList(int orderid)
         {
             return await new OrderDAO().LoadProductOrder(orderid);
         }
 
-        [Authorize]
+        //[Authorize]
         [Route("api/order/getorderstatus")]
         public async Task<ORDERSTATU> GetOrderName(int orderid)
         {
@@ -45,7 +45,7 @@ namespace ShopDienThoaiAPI.Controllers.Api
             return statusname;
         }
 
-        [Authorize]
+        //[Authorize]
         [Route("api/order/cancelorder")]
         public async Task<IHttpActionResult> CancelOrder(ORDER order)
         {
